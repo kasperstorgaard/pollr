@@ -1,0 +1,30 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": ".",
+    "rootDir": "src",
+    "target": "es5",
+    "module": "amd",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "lib": ["es2015", "dom"],
+    "paths": {
+      "testdouble": ["custom_typings/testdouble"],
+      "src/*": ["src/*"]
+    },
+    "allowJs": true
+  },
+  "filesGlob": [
+    "./src/**/*.ts",
+    "./test/**/*.ts",
+    "./jspm_packages/**/*.d.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "jspm_packages",
+    "build"
+  ]
+}

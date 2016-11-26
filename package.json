@@ -4,7 +4,8 @@
   "description": "simple app where you can create a poll for anything",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node serve.js"
   },
   "repository": {
     "type": "git",
@@ -20,5 +21,19 @@
   "bugs": {
     "url": "https://github.com/kasperstorgaard/pollr/issues"
   },
-  "homepage": "https://github.com/kasperstorgaard/pollr#readme"
+  "homepage": "https://github.com/kasperstorgaard/pollr#readme",
+  "devDependencies": {
+    "browser-sync": "^2.18.2",
+    "jspm": "^0.16.48"
+  },
+  "jspm": {
+    "dependencies": {
+      "aurelia-bootstrapper": "npm:aurelia-bootstrapper@^1.0.1",
+      "aurelia-framework": "npm:aurelia-framework@^1.0.7"
+    },
+    "devDependencies": {
+      "ts": "github:frankwallis/plugin-typescript@^5.3.1",
+      "typescript": "npm:typescript@^2.0.7"
+    }
+  }
 }
