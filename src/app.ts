@@ -1,7 +1,5 @@
-import {inject} from 'aurelia-framework';
 import {Router, RouterConfiguration} from 'aurelia-router';
 
-@inject(Router)
 export class App {
   public heading = 'pollr';
   public router: Router;
@@ -9,23 +7,35 @@ export class App {
   public configureRouter(config: RouterConfiguration, router: Router) {
     config.title = 'pollr';
 
-    const landing = {
-      moduleId: './landing/landing',
+    const landingPage = {
+      moduleId: './sections/landing/landing-page',
       name: 'landing',
       nav: true,
       route: ['', 'landing'],
       title: 'landing'
     };
 
-    const user = {
-      moduleId: './user/user',
+    const userPage = {
+      moduleId: './sections/user/user-page',
       name: 'user',
       nav: true,
       route: 'user',
       title: 'user'
     };
 
-    config.map([landing, user]);
+    const pollsPage = {
+      moduleId: './sections/polls/polls-page',
+      name: 'polls',
+      nav: true,
+      route: 'polls',
+      title: 'polls'
+    };
+
+    config.map([
+      landingPage,
+      userPage,
+      pollsPage
+    ]);
 
     this.router = router;
   }
