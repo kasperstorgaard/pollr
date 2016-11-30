@@ -1,3 +1,6 @@
 node_modules/
 dist/
 jspm_packages/
+.hz/secrets.toml
+**/*.log
+rethinkdb_data

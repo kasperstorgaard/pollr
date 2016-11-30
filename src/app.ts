@@ -1,4 +1,5 @@
-import {Router, RouterConfiguration} from 'aurelia-router';
+import { Router, RouterConfiguration } from 'aurelia-router';
+import './horizon';
 
 export class App {
   public heading = 'pollr';
