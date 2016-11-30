@@ -29,7 +29,9 @@
   "jspm": {
     "dependencies": {
       "aurelia-bootstrapper": "npm:aurelia-bootstrapper@^1.0.1",
-      "aurelia-framework": "npm:aurelia-framework@^1.0.7"
+      "aurelia-framework": "npm:aurelia-framework@^1.0.7",
+      "css": "github:systemjs/plugin-css@^0.1.32",
+      "google/material-design-lite": "github:google/material-design-lite@^1.2.1"
     },
     "devDependencies": {
       "ts": "github:frankwallis/plugin-typescript@^5.3.1",

@@ -6,12 +6,16 @@ System.config({
     "github:*": "jspm_packages/github/*",
     "npm:*": "jspm_packages/npm/*"
   },
-  "packages": {
+
+  packages: {
     "src": {
       "defaultExtension": "ts",
       "meta": {
         "*.ts": {
           "loader": "ts"
+        },
+        "*.css": {
+          "loader": "css"
         }
       }
     }
@@ -20,6 +24,8 @@ System.config({
   map: {
     "aurelia-bootstrapper": "npm:aurelia-bootstrapper@1.0.1",
     "aurelia-framework": "npm:aurelia-framework@1.0.7",
+    "css": "github:systemjs/plugin-css@0.1.32",
+    "google/material-design-lite": "github:google/material-design-lite@1.2.1",
     "ts": "github:frankwallis/plugin-typescript@5.3.1",
     "typescript": "npm:typescript@2.1.1",
     "github:frankwallis/plugin-typescript@5.3.1": {
