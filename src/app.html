@@ -1,6 +1,42 @@
 <template>
-    <h1>${heading}</h1>
-    <div class="page-host">
-        <router-view></router-view>
+    <!-- style -->
+    <require from="./app.css"></require>
+    <require from="google/material-design-lite/material.min.css!"></require>
+
+    <!-- views -->
+    <require from="./shared/account/account-view.html"></require>
+    <require from="./shared/nav/nav-view.html"></require>
+    <require from="./shared/search/search-box.html"></require>
+
+    <div class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
+      <header class="demo-header mdl-layout__header mdl-color--grey-100 mdl-color-text--grey-600">
+        <div class="mdl-layout__header-row">
+          <span class="mdl-layout-title">Home</span>
+          <div class="mdl-layout-spacer"></div>
+
+          <!-- search -->
+          <search-box><search-box>
+          <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" id="hdrbtn">
+            <i class="material-icons">more_vert</i>
+          </button>
+          <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--bottom-right" for="hdrbtn">
+            <li class="mdl-menu__item">About</li>
+            <li class="mdl-menu__item">Contact</li>
+            <li class="mdl-menu__item">Legal information</li>
+          </ul>
+        </div>
+      </header>
+
+      <div class="demo-drawer mdl-layout__drawer mdl-color--blue-grey-900 mdl-color-text--blue-grey-50">
+        <!-- account -->
+        <account-view></account-view>
+
+        <!-- nav -->
+        <nav-view></nav-view>
+      </div>
+
+      <main class="mdl-layout__content mdl-color--grey-100">
+          <router-view></router-view>
+      </main>
     </div>
 </template>
