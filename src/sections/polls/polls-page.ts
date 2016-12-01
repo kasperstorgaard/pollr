@@ -1,4 +1,4 @@
-import {Router, RouterConfiguration} from 'aurelia-router';
+import { Router, RouterConfiguration } from 'aurelia-router';
 
 export class Polls {
     public router: Router;
@@ -29,4 +29,5 @@ export class Polls {
 
         this.router = router;
     }
+
 };
