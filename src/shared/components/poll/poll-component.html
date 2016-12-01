@@ -1,0 +1,9 @@
+<template bindable="poll-id">
+    <span>${pollId}</span>
+    <ul>
+        <li repeat.for="choice of choices">
+            <span>Count: ${choice.count}</span>
+            <button click.trigger="vote(choice.id)">vote</button>
+        </li>
+    </ul>
+</template>

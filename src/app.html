@@ -4,9 +4,9 @@
     <require from="google/material-design-lite/material.min.css!"></require>
 
     <!-- views -->
-    <require from="./shared/account/account-view.html"></require>
-    <require from="./shared/nav/nav-view.html"></require>
-    <require from="./shared/search/search-box.html"></require>
+    <require from="./shared/components/account/account-component.html"></require>
+    <require from="./shared/components/nav/nav-component.html"></require>
+    <require from="./shared/components/search/search-component.html"></require>
 
     <div class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
       <header class="demo-header mdl-layout__header mdl-color--grey-100 mdl-color-text--grey-600">
@@ -15,7 +15,7 @@
           <div class="mdl-layout-spacer"></div>
 
           <!-- search -->
-          <search-box><search-box>
+          <search-component></search-component>
           <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" id="hdrbtn">
             <i class="material-icons">more_vert</i>
           </button>
@@ -29,10 +29,10 @@
 
       <div class="demo-drawer mdl-layout__drawer mdl-color--blue-grey-900 mdl-color-text--blue-grey-50">
         <!-- account -->
-        <account-view></account-view>
+        <account-component></account-component>
 
         <!-- nav -->
-        <nav-view></nav-view>
+        <nav-component></nav-component>
       </div>
 
       <main class="mdl-layout__content mdl-color--grey-100">
