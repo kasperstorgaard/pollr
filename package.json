@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "horizon": "hz serve --start-rethinkdb --secure no --permissions no --auto-create-collection --auto-create-index",
-    "serve": "node serve.js",
+    "serve": "node ./build/serve.js",
     "start": "concurrently --kill-others \"npm run horizon\" \"npm run serve\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/kasperstorgaard/pollr#readme",
   "devDependencies": {
+    "aurelia-bundler": "^0.5.0",
     "browser-sync": "^2.18.2",
     "concurrently": "^3.1.0",
     "jspm": "github:jspm/jspm-cli#0.17"
