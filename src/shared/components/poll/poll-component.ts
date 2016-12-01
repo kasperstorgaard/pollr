@@ -5,24 +5,34 @@ import { collection } from '../../data/polls';
 export class PollComponent {
     @bindable public pollId: String;
     public choices: Array<any>; // TODO: change to choices class
+
     private poll: any;
     private collection: any;
+    private unsubscribe: Function;
 
     constructor (collection) {
         this.collection = collection;
     }
 
+    // - lifecycle callbacks - //
     public bind () {
-        this.poll = collection.find({ id: this.pollId });
-        this.setupSubscription(this.poll);
+        this.poll = this.collection.find({ id: this.pollId });
+        this.unsubscribe = this.setupSubscription(this.poll);
+    }
+
+    public unbind () {
+        if (!this.unsubscribe) {
+            return;
+        }
+        this.unsubscribe();
     }
 
     // - public methods - //
-    public vote (choiceId) {
-        const choice = this.choices[choiceId];
-        choice.votes++; // TODO: call method of choice class when done
+    public vote (id) {
+        const choice = this.choices.find(c => c.id === id);
+        choice.count++; // TODO: call method of choice class when done
 
-        this.poll.update({
+        this.collection.update({
             choices: this.choices,
             id: this.pollId
         });
@@ -37,7 +47,7 @@ export class PollComponent {
     }
 
     private setupSubscription (poll) {
-        poll.fetch().defaultIfEmpty()
+        return poll.watch().defaultIfEmpty()
             .subscribe(this.updateData.bind(this));
     }
 }
