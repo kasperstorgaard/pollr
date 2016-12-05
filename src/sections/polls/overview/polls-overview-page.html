@@ -4,15 +4,12 @@
   <require from="../../../shared/components/poll/poll-component"></require>
 
   <div class="mdl-grid demo-content">
-    <div class="demo-charts mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid">
-      <div>${polls.length}</div>
-      <poll-component
-        repeat.for="poll of polls"
-        poll-id.bind="poll.id"
-      ></poll-component>
-    </div>
-    <div class="demo-graphs mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--8-col">
-    </div>
+    <poll-component
+      class="mdl-cell mdl-cell--4-col mdl-color--white mdl-shadow--2dp"
+      repeat.for="poll of polls"
+      poll-id.bind="poll.id"
+    ></poll-component>
+
     <div class="demo-cards mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-grid mdl-grid--no-spacing">
       <!-- card -->
       <info-card></info-card>
