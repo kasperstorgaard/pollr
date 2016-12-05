@@ -1,26 +1,37 @@
-<template bindable="poll-id">
+<template bindable="poll-id"
+    class="mdl-card mdl-shadow--2dp">
     <require from="../donut-chart/donut-chart-component"></require>
 
-    <donut-chart-component
-        chart-data.bind="choices"
-        style="width: 80%; display: block; margin: 10%"
-    ></donut-chart-component>
-    <div>
+    <div class="mdl-card__title mdl-card--expand">
+        <h2 class="mdl-card__title-text">${name}</h2>
+    </div>
+    <div class="mdl-card__media">
+        <donut-chart-component
+            color.bind="color"
+            chart-data.bind="choices"
+            style="width: 80%; display: block; margin: 10%"
+        ></donut-chart-component>
+    </div>
+    <div class="mdl-card__actions mdl-card--border">
         <button repeat.for="choice of choices"
             class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
             click.trigger="vote(choice.id)"
+            style.bind="getBgStyle(choice.id)"
         >${choice.id}</button>
-    </div>
 
-    <!-- admin actions -->
-    <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon"
-        id="settings-${pollId}">
-        <i class="material-icons">settings</i>
-    </button>
-    <ul class="mdl-menu mdl-js-menu mdl-menu--bottom-right mdl-js-ripple-effect"
-        for="settings-${pollId}"
-    >
-        <li click.delegate="reset()">reset</reset>
-        <li click.delegate="delete()">delete</reset>
-    </ul>
+        <!-- admin actions -->
+        <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon"
+            id="settings">
+            <i class="material-icons">settings</i>
+        </button>
+        <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--top-left"
+            for="settings">
+            <li class="mdl-menu__item"
+                click.delegate="reset()"
+            >reset</reset>
+            <li class="mdl-menu__item"
+                click.delegate="delete()"
+            >delete</reset>
+        </ul>
+    </div>
 </template>
