@@ -3,6 +3,7 @@
 
     <donut-chart-component
         chart-data.bind="choices"
+        style="width: 80%; display: block; margin: 10%"
     ></donut-chart-component>
     <div>
         <button repeat.for="choice of choices"
@@ -10,7 +11,16 @@
             click.trigger="vote(choice.id)"
         >${choice.id}</button>
     </div>
-    <div>
-        <button click.trigger="reset()">reset</button>
-    </div>
+
+    <!-- admin actions -->
+    <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon"
+        id="settings-${pollId}">
+        <i class="material-icons">settings</i>
+    </button>
+    <ul class="mdl-menu mdl-js-menu mdl-menu--bottom-right mdl-js-ripple-effect"
+        for="settings-${pollId}"
+    >
+        <li click.delegate="reset()">reset</reset>
+        <li click.delegate="delete()">delete</reset>
+    </ul>
 </template>
