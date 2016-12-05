@@ -14,6 +14,8 @@
       "testdouble": ["custom_typings/testdouble"],
       "src/*": ["src/*"]
     },
+    "typeRoots" : ["node_modules"],
+    "types" : ["types.d3"],
     "allowJs": true
   },
   "filesGlob": [
