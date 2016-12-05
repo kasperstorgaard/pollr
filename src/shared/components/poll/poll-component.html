@@ -1,10 +1,16 @@
 <template bindable="poll-id">
-    <span>${pollId}</span>
-    <ul>
-        <li repeat.for="choice of choices">
-            <div>Name: ${choice.id}</div>
-            <div>Count: ${choice.count}</div>
-            <button click.trigger="vote(choice.id)">vote</button>
-        </li>
-    </ul>
+    <require from="../donut-chart/donut-chart-component"></require>
+
+    <donut-chart-component
+        chart-data.bind="choices"
+    ></donut-chart-component>
+    <div>
+        <button repeat.for="choice of choices"
+            class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
+            click.trigger="vote(choice.id)"
+        >${choice.id}</button>
+    </div>
+    <div>
+        <button click.trigger="reset()">reset</button>
+    </div>
 </template>
