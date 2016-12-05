@@ -5,7 +5,8 @@ import * as d3lib from 'd3';
 export class DonutChartComponent {
     @bindable public chartData: any[];
     @bindable public color: Function;
-    @bindable public keyProp: string = 'key';
+    @bindable public keyProp: string = 'id';
+    @bindable public nameProp: string = 'name';
     @bindable public valueProp: string = 'value';
 
     private d3;
@@ -131,7 +132,7 @@ export class DonutChartComponent {
             .duration(600)
             .attrTween('d', (d) => {
                 const base = this.arcLookup[d.data[this.keyProp]];
-                this.getArcTween(base)(d);
+                return this.getArcTween(base)(d);
             })
             .on('end', () => this.saveArcs(enterUpdate));
 
