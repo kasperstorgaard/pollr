@@ -3,7 +3,7 @@ import * as d3lib from 'd3';
 
 @inject(d3lib, DOM.Element)
 export class DonutChartComponent {
-    @bindable public chartData: Array<any>;
+    @bindable public chartData: any[];
     @bindable public color: Function;
 
     private d3;
@@ -11,8 +11,8 @@ export class DonutChartComponent {
     private arc: Function;
     private pie: Function;
     private svg;
-    private path;
     private size: number;
+    private arcLookup: Object = {};
 
     constructor (d3lib, element: HTMLElement) {
         this.d3 = d3lib;
@@ -39,7 +39,7 @@ export class DonutChartComponent {
      *
      * @memberOf DonutChartComponent
      */
-    public chartDataChanged (data: Array<any> = []) {
+    public chartDataChanged (data: any[] = []) {
         if (!this.size) {
             return;
         }
@@ -91,16 +91,17 @@ export class DonutChartComponent {
      * @memberOf DonutChartComponent
      */
     private initialize (svg, data, color) {
-        this.path = svg.selectAll('path')
+        const arcs = svg.selectAll('path')
             .data(this.pie(data))
             .enter()
             .append('path')
             .attr('d', this.arc)
             .attr('fill', d => color(d.data.id));
 
-        this.path.transition()
+        arcs.transition()
             .duration(1000)
-            .attrTween('d', this.getArcTween());
+            .attrTween('d', this.getArcTween())
+            .on('end', () => this.saveArcs(arcs));
     }
 
     /**
@@ -113,7 +114,7 @@ export class DonutChartComponent {
      *
      * @memberOf DonutChartComponent
      */
-    private update (svg, data: Array<any>, color: Function) {
+    private update (svg, data: any[], color: Function) {
         const arcs = svg.selectAll('path')
             .data(this.pie(data));
 
@@ -121,18 +122,36 @@ export class DonutChartComponent {
         const enter = arcs.enter().append('path');
         const enterUpdate = enter.merge(arcs);
 
-        enterUpdate
-            .attr('d', this.arc)
-            .attr('fill', d => color(d.data.id));
+        enterUpdate.attr('fill', d => color(d.data.id));
 
+        // update
+        arcs.transition()
+            .duration(600)
+            .attrTween('d', (d) => {
+                const base = this.arcLookup[d.data.id];
+                this.getArcTween(base)(d);
+            })
+            .on('end', () => this.saveArcs(enterUpdate));
+
+        // exit
         exit.transition()
             .duration(600)
             .attrTween('d', this.getArcTween())
             .remove();
 
+        // enter
         enter.transition()
             .duration(600)
             .attrTween('d', this.getArcTween());
+    }
+
+    private saveArcs (arcs: any) {
+        arcs.each((arc) => {
+            this.arcLookup[arc.data.id] = {
+                endAngle: arc.endAngle,
+                startAngle: arc.startAngle
+            };
+        });
     }
 
     private getArcTween (base: Object = { endAngle: 0, startAngle: 0 }) {
