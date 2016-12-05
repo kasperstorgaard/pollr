@@ -27,27 +27,39 @@ export class PollComponent {
         this.unsubscribe();
     }
 
+    attached () {
+        componentHandler.upgradeDom();
+    }
+
     // - public methods - //
     public vote (id) {
         const choice = this.choices.find(c => c.id === id);
         choice.count++; // TODO: call method of choice class when done
+        this.storeData();
+    }
 
-        this.collection.update({
-            choices: this.choices,
-            id: this.pollId
-        });
+    public reset () {
+        this.choices.forEach(c => c.count = 1);
+        this.storeData();
     }
 
     // - private methods - //
-    private updateData (poll) {
+    private dataUpdated (poll) {
         if (!poll) {
             return;
         }
         this.choices = poll.choices;
     }
 
+    private storeData () {
+        this.collection.update({
+           choices:  this.choices,
+           id: this.pollId
+        });
+    }
+
     private setupSubscription (poll) {
         return poll.watch().defaultIfEmpty()
-            .subscribe(this.updateData.bind(this));
+            .subscribe(this.dataUpdated.bind(this));
     }
 }
