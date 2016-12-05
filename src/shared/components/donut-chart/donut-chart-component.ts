@@ -100,23 +100,7 @@ export class DonutChartComponent {
 
         this.path.transition()
             .duration(1000)
-            .attrTween('d', (d) => {
-                const baseArc = { endAngle: 0, startAngle: 0 };
-                const interpolate = this.d3.interpolateObject(baseArc, d);
-                return (t) => {
-                    return this.arc(interpolate(t));
-                };
-            });
-    }
-
-    private getArcTween (baseArc) {
-        return function () {
-            const baseArc = { endAngle: 0, startAngle: 0 };
-            const interpolate = this.d3.interpolateObject(baseArc, d);
-            return (t) => {
-                return this.arc(interpolate(t));
-            };
-        }
+            .attrTween('d', this.getArcTween());
     }
 
     /**
@@ -143,23 +127,18 @@ export class DonutChartComponent {
 
         exit.transition()
             .duration(600)
-            .attrTween('d', (d) => {
-                const baseArc = { endAngle: 0, startAngle: 0 };
-                const interpolate = this.d3.interpolateObject(baseArc, d);
-                return (t) => {
-                    return this.arc(interpolate(t));
-                };
-            })
+            .attrTween('d', this.getArcTween())
             .remove();
 
         enter.transition()
             .duration(600)
-            .attrTween('d', (d) => {
-                const baseArc = { endAngle: 0, startAngle: 0 };
-                const interpolate = this.d3.interpolateObject(baseArc, d);
-                return (t) => {
-                    return this.arc(interpolate(t));
-                };
-            });
+            .attrTween('d', this.getArcTween());
+    }
+
+    private getArcTween (base: Object = { endAngle: 0, startAngle: 0 }) {
+        return (d) => {
+            const interpolate = this.d3.interpolateObject(base, d);
+            return t => this.arc(interpolate(t));
+        };
     }
 }
