@@ -7,7 +7,7 @@ const bundles = {
             'src/**/*.html!text',
             'src/**/*.css!text',
             'index.html!text',
-            'google/material-design-lite/material.min.css!text',
+            'material-design-lite/material.min.css!text',
             '@horizon/client'
         ],
         options: {
