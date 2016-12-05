@@ -4,6 +4,7 @@ import * as d3 from 'd3';
 @inject(d3, DOM.Element)
 export class DonutChartComponent {
     @bindable public chartData: Array<any>;
+    @bindable public color: Function;
 
     private d3;
     private element;
@@ -12,12 +13,10 @@ export class DonutChartComponent {
     private svg;
     private path;
     private size;
-    private color: Function;
 
     constructor (d3, element) {
         this.d3 = d3;
         this.element = element;
-        this.color = d3.scaleOrdinal(d3.schemeCategory20);
     }
 
     // - lifecycle events - //
@@ -42,11 +41,10 @@ export class DonutChartComponent {
 
         if (!this.svg) {
             this.createElements(this.element, this.size);
-            this.draw(this.svg, data, this.color);
+            this.setup(this.svg, data, this.color);
             return;
         }
 
-        this.reset(this.svg, data);
         this.draw(this.svg, data, this.color);
     }
 
@@ -68,18 +66,56 @@ export class DonutChartComponent {
             .attr('transform', `translate(${radius},${radius})`);
     }
 
-    private draw (svg, data, color) {
-        this.path = svg.datum(data).selectAll('path')
-            .data(this.pie)
+    private setup (svg, data, color) {
+        this.path = svg.selectAll('path')
+            .data(this.pie(data))
             .enter()
             .append('path')
             .attr('d', this.arc)
             .attr('fill', d => color(d.data.id));
 
+        this.path.transition()
+            .duration(1000)
+            .attrTween('d', (d) => {
+                const baseArc = { endAngle: 0, startAngle: 0 };
+                const interpolate = d3.interpolateObject(baseArc, d);
+                return (t) => {
+                    return this.arc(interpolate(t));
+                };
+            });
     }
 
-    private reset (svg, data) {
-        this.path.data(data)
-            .exit().remove();
+    private draw (svg, data, color) {
+        const arcs = svg.selectAll('path')
+            .data(this.pie(data));
+
+        const exit = arcs.exit();
+        const enter = arcs.enter().append('path');
+        const enterUpdate = enter.merge(arcs);
+
+        enterUpdate
+            .attr('d', this.arc)
+            .attr('fill', d => color(d.data.id));
+
+        exit.transition()
+            .duration(600)
+            .attrTween('d', (d) => {
+                const baseArc = { endAngle: 0, startAngle: 0 };
+                const interpolate = d3.interpolateObject(baseArc, d);
+                return (t) => {
+                    return this.arc(interpolate(t));
+                };
+            })
+            .remove();
+
+        enter.transition()
+            .duration(600)
+            .attrTween('d', (d) => {
+                const baseArc = { endAngle: 0, startAngle: 0 };
+                const interpolate = d3.interpolateObject(baseArc, d);
+                return (t) => {
+                    return this.arc(interpolate(t));
+                };
+            });
     }
 }
