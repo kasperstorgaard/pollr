@@ -10,8 +10,6 @@ export class Overview {
     }
 
     private updateData (polls) {
-        console.log(polls);
-
         if (!polls) {
             this.polls = [];
             return;
