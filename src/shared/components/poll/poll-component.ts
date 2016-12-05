@@ -1,34 +1,34 @@
 import { inject, bindable } from 'aurelia-framework';
 import { collection } from '../../data/polls';
+import { colors } from '../../config/colors';
 
-@inject(collection)
+@inject(collection, colors)
 export class PollComponent {
     @bindable public pollId: String;
     public choices: Array<any>; // TODO: change to choices class
+    public name: String;
+    public color: Function;
 
     private poll: any;
     private collection: any;
-    private unsubscribe: Function;
+    private subscriber: any;
 
-    constructor (collection) {
+    constructor (collection, colors) {
         this.collection = collection;
+        this.color = colors.standard;
     }
 
     // - lifecycle callbacks - //
     public bind () {
         this.poll = this.collection.find({ id: this.pollId });
-        this.unsubscribe = this.setupSubscription(this.poll);
+        this.subscriber = this.setupSubscription(this.poll);
     }
 
     public unbind () {
-        if (!this.unsubscribe) {
+        if (!this.subscriber) {
             return;
         }
-        this.unsubscribe();
-    }
-
-    attached () {
-        componentHandler.upgradeDom();
+        this.subscriber.unsubscribe();
     }
 
     // - public methods - //
@@ -43,12 +43,17 @@ export class PollComponent {
         this.storeData();
     }
 
+    public getBgStyle (id) {
+        return `color: ${this.color(id)}`;
+    }
+
     // - private methods - //
     private dataUpdated (poll) {
         if (!poll) {
             return;
         }
-        this.choices = poll.choices;
+        const { choices, name } = poll;
+        Object.assign(this, { choices, name });
     }
 
     private storeData () {
