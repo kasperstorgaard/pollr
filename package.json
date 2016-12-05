@@ -34,8 +34,12 @@
     "dependencies": {
       "@horizon/client": "npm:@horizon/client@^2.0.0",
       "aurelia-bootstrapper": "npm:aurelia-bootstrapper@^1.0.1",
+      "aurelia-mdl-plugin": "npm:aurelia-mdl-plugin@^0.1.16",
       "css": "github:systemjs/plugin-css@^0.1.32",
-      "google/material-design-lite": "github:google/material-design-lite@^1.2.1",
+      "d3": "npm:d3@^4.4.0",
+      "d3-selection": "npm:d3-selection@^1.0.3",
+      "d3-svg": "npm:d3-svg@^0.2.0",
+      "material-design-lite": "github:google/material-design-lite@^1.2.1",
       "plugin-typescript": "github:frankwallis/plugin-typescript@^5.3.1",
       "text": "github:systemjs/plugin-text@^0.0.9",
       "typescript": "npm:typescript@^2.0.10"
@@ -89,9 +93,6 @@
       "zlib": "npm:jspm-nodelibs-zlib@^0.2.0"
     },
     "overrides": {
-      "github:google/material-design-lite@1.2.1": {
-        "main": "material.js"
-      },
       "npm:browserify-zlib@0.1.4": {
         "dependencies": {
           "readable-stream": "^2.0.2",
@@ -100,11 +101,6 @@
         "map": {
           "_stream_transform": "readable-stream/transform"
         }
-      },
-      "npm:inherits@2.0.1": {
-        "ignore": [
-          "test.js"
-        ]
       },
       "npm:inherits@2.0.3": {
         "ignore": [
@@ -134,5 +130,11 @@
         }
       }
     }
+  },
+  "dependencies": {
+    "@types/d3": "^4.3.0",
+    "@types/d3-scale": "^1.0.4",
+    "@types/d3-selection": "^1.0.5",
+    "types.d3": "^0.1.1"
   }
 }
