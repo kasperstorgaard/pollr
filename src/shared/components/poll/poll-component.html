@@ -14,7 +14,7 @@
     </div>
     <div class="mdl-card__actions mdl-card--border">
         <button repeat.for="choice of choices"
-            class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
+            class="mdl-button mdl-js-button mdl-js-ripple-effect"
             click.trigger="vote(choice.id)"
             style.bind="getBgStyle(choice.id)"
         >${choice.id}</button>
