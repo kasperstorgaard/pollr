@@ -1,54 +1,68 @@
 import { inject, bindable, DOM } from 'aurelia-framework';
-import * as d3 from 'd3';
+import * as d3lib from 'd3';
 
-@inject(d3, DOM.Element)
+@inject(d3lib, DOM.Element)
 export class DonutChartComponent {
     @bindable public chartData: Array<any>;
     @bindable public color: Function;
 
     private d3;
-    private element;
-    private arc;
-    private pie;
+    private element: HTMLElement;
+    private arc: Function;
+    private pie: Function;
     private svg;
     private path;
-    private size;
+    private size: number;
 
-    constructor (d3, element) {
-        this.d3 = d3;
+    constructor (d3lib, element: HTMLElement) {
+        this.d3 = d3lib;
         this.element = element;
     }
 
-    // - lifecycle events - //
+    /**
+     * lifecycle callback
+     * sets up the size based on the host element
+     *
+     * @memberOf DonutChartComponent
+     */
     public attached () {
         const rect = this.element.getBoundingClientRect();
         this.size = Math.floor(rect.width);
     }
 
-    // - change observers - //
-    public chartDataChanged (data = []) {
-        if (!data.length) {
-            return;
-        }
-        this.update(data);
-    }
-
-    // - private methods - //
-    private update (data) {
+    /**
+     * attribute change listener
+     * initializes or updates the chart
+     *
+     * @param {Arra<any>} [data=[]]
+     * @returns
+     *
+     * @memberOf DonutChartComponent
+     */
+    public chartDataChanged (data: Array<any> = []) {
         if (!this.size) {
             return;
         }
 
         if (!this.svg) {
             this.createElements(this.element, this.size);
-            this.setup(this.svg, data, this.color);
+            this.initialize(this.svg, data, this.color);
             return;
         }
 
-        this.draw(this.svg, data, this.color);
+        this.update(this.svg, data, this.color);
     }
 
-    private createElements (element: any, size: any) {
+    /**
+     * initializes the reusable chart elements
+     *
+     * @private
+     * @param {HTMLElement} element
+     * @param {number} size
+     *
+     * @memberOf DonutChartComponent
+     */
+    private createElements (element: HTMLElement, size: number) {
         const radius = size / 2;
         this.arc = this.d3.arc()
             .outerRadius(radius)
@@ -66,7 +80,17 @@ export class DonutChartComponent {
             .attr('transform', `translate(${radius},${radius})`);
     }
 
-    private setup (svg, data, color) {
+    /**
+     * sets up the chart, including enter animations
+     *
+     * @private
+     * @param {any} svg
+     * @param {any} data
+     * @param {any} color
+     *
+     * @memberOf DonutChartComponent
+     */
+    private initialize (svg, data, color) {
         this.path = svg.selectAll('path')
             .data(this.pie(data))
             .enter()
@@ -78,14 +102,34 @@ export class DonutChartComponent {
             .duration(1000)
             .attrTween('d', (d) => {
                 const baseArc = { endAngle: 0, startAngle: 0 };
-                const interpolate = d3.interpolateObject(baseArc, d);
+                const interpolate = this.d3.interpolateObject(baseArc, d);
                 return (t) => {
                     return this.arc(interpolate(t));
                 };
             });
     }
 
-    private draw (svg, data, color) {
+    private getArcTween (baseArc) {
+        return function () {
+            const baseArc = { endAngle: 0, startAngle: 0 };
+            const interpolate = this.d3.interpolateObject(baseArc, d);
+            return (t) => {
+                return this.arc(interpolate(t));
+            };
+        }
+    }
+
+    /**
+     * redraws the chart
+     *
+     * @private
+     * @param {any} svg
+     * @param {any} data
+     * @param {any} color
+     *
+     * @memberOf DonutChartComponent
+     */
+    private update (svg, data: Array<any>, color: Function) {
         const arcs = svg.selectAll('path')
             .data(this.pie(data));
 
@@ -101,7 +145,7 @@ export class DonutChartComponent {
             .duration(600)
             .attrTween('d', (d) => {
                 const baseArc = { endAngle: 0, startAngle: 0 };
-                const interpolate = d3.interpolateObject(baseArc, d);
+                const interpolate = this.d3.interpolateObject(baseArc, d);
                 return (t) => {
                     return this.arc(interpolate(t));
                 };
@@ -112,7 +156,7 @@ export class DonutChartComponent {
             .duration(600)
             .attrTween('d', (d) => {
                 const baseArc = { endAngle: 0, startAngle: 0 };
-                const interpolate = d3.interpolateObject(baseArc, d);
+                const interpolate = this.d3.interpolateObject(baseArc, d);
                 return (t) => {
                     return this.arc(interpolate(t));
                 };
