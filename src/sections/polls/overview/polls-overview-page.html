@@ -1,23 +1,23 @@
 <template>
-  <require from="../../../shared/components/view-options/view-options-component.html"></require>
-  <require from="../../../shared/components/info-card/info-card-component.html"></require>
-  <require from="../../../shared/components/poll/poll-component"></require>
+    <require from="../../../shared/components/view-options/view-options-component.html"></require>
+    <require from="../../../shared/components/info-card/info-card-component.html"></require>
+    <require from="../../../shared/components/poll/poll-component"></require>
 
-  <div class="mdl-grid demo-content">
-    <poll-component
-      class="mdl-cell mdl-cell--4-col mdl-color--white mdl-shadow--2dp"
-      repeat.for="poll of polls"
-      poll-id.bind="poll.id"
-    ></poll-component>
+    <div class="mdl-grid demo-content">
+        <poll-component
+            class="mdl-cell mdl-cell--4-col "
+            repeat.for="poll of polls"
+            poll-id.bind="poll.id"
+        ></poll-component>
 
-    <div class="demo-cards mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-grid mdl-grid--no-spacing">
-      <!-- card -->
-      <info-card></info-card>
+        <div class="demo-cards mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-grid mdl-grid--no-spacing">
+            <!-- card -->
+            <info-card></info-card>
 
-      <div class="demo-separator mdl-cell--1-col"></div>
+            <div class="demo-separator mdl-cell--1-col"></div>
 
-      <!-- view options -->
-      <view-options></view-options>
+            <!-- view options -->
+            <view-options></view-options>
+        </div>
     </div>
-  </div>
 </template>
