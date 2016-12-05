@@ -5,6 +5,8 @@ import * as d3lib from 'd3';
 export class DonutChartComponent {
     @bindable public chartData: any[];
     @bindable public color: Function;
+    @bindable public keyProp: string = 'key';
+    @bindable public valueProp: string = 'value';
 
     private d3;
     private element: HTMLElement;
@@ -69,7 +71,7 @@ export class DonutChartComponent {
             .innerRadius(radius * 0.6);
 
         this.pie = this.d3.pie()
-            .value((d: any) => d.count)
+            .value((d: any) => d[this.valueProp])
             .sort(null)
             .padAngle(0.05);
 
@@ -96,7 +98,7 @@ export class DonutChartComponent {
             .enter()
             .append('path')
             .attr('d', this.arc)
-            .attr('fill', d => color(d.data.id));
+            .attr('fill', d => color(d.data[this.keyProp]));
 
         arcs.transition()
             .duration(1000)
@@ -122,13 +124,13 @@ export class DonutChartComponent {
         const enter = arcs.enter().append('path');
         const enterUpdate = enter.merge(arcs);
 
-        enterUpdate.attr('fill', d => color(d.data.id));
+        enterUpdate.attr('fill', d => color(d.data[this.keyProp]));
 
         // update
         arcs.transition()
             .duration(600)
             .attrTween('d', (d) => {
-                const base = this.arcLookup[d.data.id];
+                const base = this.arcLookup[d.data[this.keyProp]];
                 this.getArcTween(base)(d);
             })
             .on('end', () => this.saveArcs(enterUpdate));
@@ -147,7 +149,7 @@ export class DonutChartComponent {
 
     private saveArcs (arcs: any) {
         arcs.each((arc) => {
-            this.arcLookup[arc.data.id] = {
+            this.arcLookup[arc.data[this.keyProp]] = {
                 endAngle: arc.endAngle,
                 startAngle: arc.startAngle
             };
