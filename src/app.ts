@@ -7,15 +7,8 @@ export class App {
   public configureRouter(config: RouterConfiguration, router: Router) {
     config.title = 'pollr';
 
-    const userPage = {
-      moduleId: './sections/user/user-page',
-      name: 'user',
-      nav: true,
-      route: 'user',
-      title: 'user'
-    };
-
     const pollsPage = {
+      icon: 'insert chart',
       moduleId: './sections/polls/polls-page',
       name: 'polls',
       nav: true,
@@ -23,9 +16,18 @@ export class App {
       title: 'polls'
     };
 
+    const userPage = {
+      icon: '',
+      moduleId: './sections/user/user-page',
+      name: 'user',
+      nav: true,
+      route: 'user',
+      title: 'user'
+    };
+
     config.map([
-      userPage,
-      pollsPage
+      pollsPage,
+      userPage
     ]);
 
     this.router = router;
