@@ -1,9 +1,8 @@
-<template bindable="router">
-    <nav class="demo-navigation mdl-navigation mdl-color--blue-grey-800">
-        <a repeat.for="route of router.navigation"
-            class="mdl-navigation__link ${route.isActive ? 'active' : ''}"
-            href.bind="route.href"
-        ><i class="mdl-color-text--blue-grey-400 material-icons"
-            role="presentation">${route.icon}</i>${route.title}</a>
-    </nav>
+<template bindable="router"
+    class="demo-navigation mdl-navigation mdl-color--blue-grey-800">
+    <a repeat.for="route of router.navigation"
+        class="mdl-navigation__link ${route.isActive ? 'active' : ''}"
+        href.bind="route.href"
+    ><i class="mdl-color-text--blue-grey-400 material-icons"
+        role="presentation">${route.settings.icon}</i>${route.title}</a>
 </template>
