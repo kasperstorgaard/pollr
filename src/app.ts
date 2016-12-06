@@ -8,19 +8,18 @@ export class App {
     config.title = 'pollr';
 
     const pollsPage = {
-      icon: 'insert chart',
       moduleId: './sections/polls/polls-page',
       name: 'polls',
       nav: true,
       route: 'polls',
-      title: 'polls'
+      settings: { icon: 'insert_chart' },
+      title: 'Polls'
     };
 
     const userPage = {
-      icon: '',
       moduleId: './sections/user/user-page',
       name: 'user',
-      nav: true,
+      nav: false,
       route: 'user',
       title: 'user'
     };
