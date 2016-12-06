@@ -8,6 +8,7 @@ export class DonutChartComponent {
     @bindable public keyProp: string = 'id';
     @bindable public nameProp: string = 'name';
     @bindable public valueProp: string = 'value';
+    @bindable public ratio: number = 0.75;
 
     private d3;
     private element: HTMLElement;
@@ -69,7 +70,7 @@ export class DonutChartComponent {
         const radius = size / 2;
         this.arc = this.d3.arc()
             .outerRadius(radius)
-            .innerRadius(radius * 0.6);
+            .innerRadius(radius * this.ratio);
 
         this.pie = this.d3.pie()
             .value((d: any) => d[this.valueProp])
