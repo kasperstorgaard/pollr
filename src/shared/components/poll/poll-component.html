@@ -7,31 +7,30 @@
     </div>
     <div class="mdl-card__media">
         <donut-chart-component
-            value-prop.bind="'count'"
             color.bind="color"
-            chart-data.bind="choices"
+            chart-data.bind="data"
             style="width: 80%; display: block; margin: 10%"
         ></donut-chart-component>
     </div>
     <div class="mdl-card__actions mdl-card--border">
-        <button repeat.for="choice of choices"
+        <button repeat.for="option of data"
             class="mdl-button mdl-js-button mdl-js-ripple-effect"
-            click.trigger="vote(choice.id)"
-            style.bind="getBgStyle(choice.id)"
-        >${choice.id}</button>
+            click.trigger="vote(pollId, option.id, data)"
+            style.bind="getBgStyle(option.id)"
+        >${option.name}</button>
 
         <!-- admin actions -->
         <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon"
-            id="settings">
+            id.bind="'settings-' + pollId">
             <i class="material-icons">settings</i>
         </button>
         <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--top-left"
-            for="settings">
+            data-mdl-for.bind="'settings-' + pollId">
             <li class="mdl-menu__item"
-                click.delegate="reset()"
+                click.delegate="reset(pollId, data)"
             >reset</reset>
             <li class="mdl-menu__item"
-                click.delegate="delete()"
+                click.delegate="remove(pollId)"
             >delete</reset>
         </ul>
     </div>

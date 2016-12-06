@@ -5,7 +5,7 @@ import { colors } from '../../config/colors';
 @inject(collection, colors)
 export class PollComponent {
     @bindable public pollId: String;
-    public choices: Array<any>; // TODO: change to choices class
+    public data: any[];
     public name: String;
     public color: Function;
 
@@ -32,15 +32,19 @@ export class PollComponent {
     }
 
     // - public methods - //
-    public vote (id) {
-        const choice = this.choices.find(c => c.id === id);
-        choice.count++; // TODO: call method of choice class when done
-        this.storeData();
+    public vote (pollId, id, data) {
+        const option = data.find(c => c.id === id);
+        option.value++;
+        this.storeData(pollId, data);
     }
 
-    public reset () {
-        this.choices.forEach(c => c.count = 1);
-        this.storeData();
+    public reset (id, data) {
+        data.forEach(c => c.value = 1);
+        this.storeData(id, data);
+    }
+
+    public remove (id) {
+        this.collection.remove(id);
     }
 
     public getBgStyle (id) {
@@ -52,15 +56,12 @@ export class PollComponent {
         if (!poll) {
             return;
         }
-        const { choices, name } = poll;
-        Object.assign(this, { choices, name });
+        const { name, data } = poll;
+        Object.assign(this, { name, data });
     }
 
-    private storeData () {
-        this.collection.update({
-           choices:  this.choices,
-           id: this.pollId
-        });
+    private storeData (id, data) {
+        this.collection.update({ id,  data });
     }
 
     private setupSubscription (poll) {
