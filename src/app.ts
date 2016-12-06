@@ -7,14 +7,6 @@ export class App {
   public configureRouter(config: RouterConfiguration, router: Router) {
     config.title = 'pollr';
 
-    const landingPage = {
-      moduleId: './sections/landing/landing-page',
-      name: 'landing',
-      nav: true,
-      route: ['', 'landing'],
-      title: 'landing'
-    };
-
     const userPage = {
       moduleId: './sections/user/user-page',
       name: 'user',
@@ -32,7 +24,6 @@ export class App {
     };
 
     config.map([
-      landingPage,
       userPage,
       pollsPage
     ]);
