@@ -1,3 +1,42 @@
-<template>
-    polls new
+<template class="mdl-cell mdl-cell--4-col">
+    <require from="../../../shared/components/donut-chart/donut-chart-component"></require>
+
+    <div class="mdl-card mdl-shadow--2dp">
+        <div class="mdl-card__title mdl-card--expand">
+            <div class="mdl-textfield mdl-js-textfield">
+                <input class="mdl-textfield__input"
+                    type="text"
+                    id="name"
+                    value.two-way="name">
+                <label class="mdl-textfield__label"
+                    for="name"
+                >Name...</label>
+            </div>
+        </div>
+        <div class="mdl-card__media">
+            <donut-chart-component class="mdl-cell mdl-cell--4-col "
+                color.bind="color"
+                chart-data.one-way="data"
+                style="width: 80%; display: block; margin: 10%"
+            ></donut-chart-component>
+        </div>
+        <div class="mdl-card__actions mdl-card--border">
+            <div class="mdl-textfield mdl-js-textfield">
+                <input class="mdl-textfield__input"
+                    type="text"
+                    id="option"
+                    value.two-way="optionName"
+                >
+                <label class="mdl-textfield__label"
+                    for="option"
+                >Option name...</label>
+            </div>
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect"
+                click.trigger="addOption(optionName)"
+            >Add option</button>
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect"
+                click.trigger="create(name, data)"
+            >Create</button>
+        </div>
+    </div>
 </template>
