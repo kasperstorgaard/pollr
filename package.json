@@ -1,6 +1,6 @@
 {
   "name": "pollr",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "simple app where you can create a poll for anything",
   "main": "index.js",
   "scripts": {
