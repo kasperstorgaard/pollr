@@ -104,7 +104,7 @@ export class DonutChartComponent {
 
         arcs.transition()
             .duration(1000)
-            .attrTween('d', this.getArcTween())
+            .attrTween('d', this.getArcTween(''))
             .on('end', () => this.saveArcs(arcs));
     }
 
@@ -132,23 +132,33 @@ export class DonutChartComponent {
         arcs.transition()
             .duration(600)
             .attrTween('d', (d) => {
-                const base = this.arcLookup[d.data[this.keyProp]];
-                return this.getArcTween(base)(d);
+                const prevArc = this.arcLookup[d.data[this.keyProp]];
+                const interpolate = this.d3.interpolateObject(prevArc, d);
+                return t => this.arc(interpolate(t));
             })
             .on('end', () => this.saveArcs(enterUpdate));
 
         // exit
         exit.transition()
             .duration(600)
-            .attrTween('d', this.getArcTween())
+            .attrTween('d', this.getArcTween('midReverse'))
             .remove();
 
         // enter
         enter.transition()
             .duration(600)
-            .attrTween('d', this.getArcTween());
+            .attrTween('d', this.getArcTween('mid'));
     }
 
+    /**
+     * saves the arc data to the lookup by id
+     * this is used to compute transitions between arc states
+     * 
+     * @private
+     * @param {*} arcs
+     * 
+     * @memberOf DonutChartComponent
+     */
     private saveArcs (arcs: any) {
         arcs.each((arc) => {
             this.arcLookup[arc.data[this.keyProp]] = {
@@ -158,10 +168,31 @@ export class DonutChartComponent {
         });
     }
 
-    private getArcTween (base: Object = { endAngle: 0, startAngle: 0 }) {
-        return (d) => {
-            const interpolate = this.d3.interpolateObject(base, d);
-            return t => this.arc(interpolate(t));
-        };
+    private getArcTween (type: string = 'start') {
+        if (type === 'start') {
+            return (d) => {
+                const startObj = { endAngle: 0, startAngle: 0 };
+                const interpolate = this.d3.interpolateObject(startObj, d);
+                return t => this.arc(interpolate(t));
+            };
+        }
+
+        if (type === 'mid') {
+            return (d) => {
+                const mid = (d.endAngle + d.startAngle) / 2;
+                const midObj = { endAngle: mid, startAngle: mid };
+                const interpolate = this.d3.interpolateObject(midObj, d);
+                return t => this.arc(interpolate(t));
+            };
+        }
+
+        if (type === 'midReverse') {
+            return (d) => {
+                const mid = (d.endAngle + d.startAngle) / 2;
+                const midObj = { endAngle: mid, startAngle: mid };
+                const interpolate = this.d3.interpolateObject(d, midObj);
+                return t => this.arc(interpolate(t));
+            };
+        }
     }
 }
