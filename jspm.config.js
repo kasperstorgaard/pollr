@@ -26,7 +26,7 @@ SystemJS.config({
     }
   },
   map: {
-    "hz": "npm:@horizon/client@2.0.0"
+    "rxjs/add/operator/distinct": "npm:rxjs@5.0.0-beta.11/add/operator/distinct.js"
   }
 });
 
@@ -82,6 +82,8 @@ SystemJS.config({
     "path": "npm:jspm-nodelibs-path@0.2.1",
     "plugin-typescript": "github:frankwallis/plugin-typescript@5.3.1",
     "process": "npm:jspm-nodelibs-process@0.2.0",
+    "rxjs": "npm:rxjs@5.0.0-beta.11",
+    "rxjs/Rx": "npm:rxjs@5.0.0-beta.11/Rx.js",
     "stream": "npm:jspm-nodelibs-stream@0.2.0",
     "string_decoder": "npm:jspm-nodelibs-string_decoder@0.2.0",
     "tls": "npm:jspm-nodelibs-tls@0.2.0",
