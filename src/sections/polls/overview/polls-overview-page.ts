@@ -1,48 +1,28 @@
 import { inject } from 'aurelia-framework';
-import { collection } from '../../../shared/data/polls';
+import { EventAggregator } from 'aurelia-event-aggregator';
+import { PollsStore } from '../../../shared/data/polls/polls-store';
 
-@inject(collection)
+@inject(PollsStore, EventAggregator)
 export class Overview {
     public polls: any[] = []; // TODO: change to Array<Poll>
+    private subscriber: any;
+    private ea: EventAggregator;
 
-    private subscribers: any[] = [];
-
-    constructor (collection) {
-        const changeFeed = collection.watch({ rawChanges: true });
-        this.subscribers = this.subscribe(changeFeed);
+    constructor (store: PollsStore, ea: EventAggregator) {
+        this.subscriber = this.subscribe(store.collection);
+        this.ea = ea;
     }
 
     public unbind () {
-        if (!this.subscribers.length) {
-            return;
-        }
-        this.subscribers.forEach(sub => sub.unsubscribe());
+        this.subscriber.unsubscribe();
     }
 
-    private subscribe (changeFeed) {
-        const added = changeFeed
-            .filter(cursor => !cursor.old_val && cursor.new_val)
-            .map(cursor => cursor.new_val);
-
-        const removed = changeFeed
-            .filter(cursor => !cursor.new_val && cursor.old_val)
-            .map(cursor => cursor.old_val);
-
-        return [
-            added.subscribe(poll => this.addPoll(poll)),
-            removed.subscribe(poll => this.removePoll(poll))
-        ];
+    private update (polls) {
+        this.polls = polls;
     }
 
-    private addPoll (poll) {
-        this.polls.push(poll);
-    }
-
-    private removePoll (poll) {
-        const idx = this.polls.findIndex(p => p.id === poll.id);
-        if (idx === -1) {
-            return;
-        }
-        this.polls.splice(idx, 1);
+    private subscribe (collection) {
+        return collection.watch()
+            .subscribe(this.update.bind(this));
     }
 };
