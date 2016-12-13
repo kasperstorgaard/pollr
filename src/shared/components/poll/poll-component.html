@@ -1,36 +1,36 @@
-<template bindable="poll-id"
+<template bindable="poll"
     class="mdl-card mdl-shadow--2dp">
     <require from="../donut-chart/donut-chart-component"></require>
 
     <div class="mdl-card__title mdl-card--expand mdl-card--border">
-        <h2 class="mdl-card__title-text">${name}</h2>
+        <h2 class="mdl-card__title-text">${poll.name}</h2>
     </div>
     <div>
         <donut-chart-component
             color.bind="color"
-            chart-data.bind="data"
+            chart-data.bind="poll.options"
             style="width: 80%; display: block; margin: 10%"
         ></donut-chart-component>
     </div>
     <div class="mdl-card__actions mdl-card--border">
-        <button repeat.for="option of data"
+        <button repeat.for="option of poll.options"
             class="mdl-button mdl-js-button mdl-js-ripple-effect"
-            click.trigger="vote(pollId, option.id, data)"
+            click.trigger="vote(poll, option.id)"
             style.bind="getBgStyle(option.id)"
         >${option.name}</button>
 
         <!-- admin actions -->
         <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon"
-            id.bind="'settings-' + pollId">
+            id.bind="'settings-' + poll.id">
             <i class="material-icons">settings</i>
         </button>
         <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--top-left"
-            data-mdl-for.bind="'settings-' + pollId">
+            data-mdl-for.bind="'settings-' + poll.id">
             <li class="mdl-menu__item"
-                click.delegate="reset(pollId, data)"
+                click.delegate="reset(poll)"
             >reset</reset>
             <li class="mdl-menu__item"
-                click.delegate="remove(pollId)"
+                click.delegate="remove(poll)"
             >delete</reset>
         </ul>
     </div>
