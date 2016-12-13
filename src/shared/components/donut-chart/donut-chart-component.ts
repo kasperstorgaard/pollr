@@ -17,6 +17,7 @@ export class DonutChartComponent {
     private svg;
     private size: number;
     private arcLookup: Object = {};
+    private initialized: boolean;
 
     constructor (d3lib, element: HTMLElement) {
         this.d3 = d3lib;
@@ -32,6 +33,10 @@ export class DonutChartComponent {
     public attached () {
         const rect = this.element.getBoundingClientRect();
         this.size = Math.floor(rect.width);
+
+        if (this.chartData && !this.initialized) {
+            this.initialize(this.chartData, this.color);
+        }
     }
 
     /**
@@ -49,8 +54,7 @@ export class DonutChartComponent {
         }
 
         if (!this.svg) {
-            this.createElements(this.element, this.size);
-            this.initialize(this.svg, data, this.color);
+            this.initialize(data, this.color);
             return;
         }
 
@@ -94,7 +98,11 @@ export class DonutChartComponent {
      *
      * @memberOf DonutChartComponent
      */
-    private initialize (svg, data, color) {
+    private initialize (data, color) {
+        this.createElements(this.element, this.size);
+
+        const { svg } = this;
+
         const arcs = svg.selectAll('path')
             .data(this.pie(data))
             .enter()
@@ -106,6 +114,8 @@ export class DonutChartComponent {
             .duration(1000)
             .attrTween('d', this.getArcTween(''))
             .on('end', () => this.saveArcs(arcs));
+
+        this.initialized = true;
     }
 
     /**
