@@ -16,7 +16,7 @@
         <div class="mdl-card__media">
             <donut-chart-component class="mdl-cell mdl-cell--4-col "
                 color.bind="color"
-                chart-data.one-way="data"
+                chart-data.one-way="options"
                 style="width: 80%; display: block; margin: 10%"
             ></donut-chart-component>
         </div>
@@ -35,7 +35,7 @@
                 click.trigger="addOption(optionName)"
             >Add option</button>
             <button class="mdl-button mdl-js-button mdl-js-ripple-effect"
-                click.trigger="create(name, data)"
+                click.trigger="create(name, options)"
             >Create</button>
         </div>
     </div>
