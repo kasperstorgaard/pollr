@@ -46,8 +46,8 @@ export class Overview {
 
         const removed = changesStream
             .defaultIfEmpty()
-            .filter(c => c.new_val && !c.old_val)
-            .map(c => c.new_val);
+            .filter(c => c.old_val && !c.new_val)
+            .map(c => c.old_val);
 
         const updated = changesStream
             .defaultIfEmpty()

@@ -28,6 +28,6 @@ export class PollComponent {
     }
 
     public getBgStyle (id) {
-        return `color: ${this.color(id)}`;
+        return `background: ${this.color(id)}`;
     }
 }

@@ -1,8 +1,7 @@
-<template bindable="poll"
-    class="mdl-card mdl-shadow--2dp">
+<template bindable="poll">
     <require from="../donut-chart/donut-chart-component"></require>
 
-    <div class="mdl-card__title mdl-card--expand mdl-card--border">
+    <div class="mdl-card__title mdl-card--border">
         <h2 class="mdl-card__title-text">${poll.name}</h2>
     </div>
     <div>
@@ -12,11 +11,13 @@
             style="width: 80%; display: block; margin: 10%"
         ></donut-chart-component>
     </div>
-    <div class="mdl-card__actions mdl-card--border">
+    <div if.bind="poll.id"
+        class="mdl-card__actions mdl-card--border">
         <button repeat.for="option of poll.options"
             class="mdl-button mdl-js-button mdl-js-ripple-effect"
             click.trigger="vote(poll, option.id)"
             style.bind="getBgStyle(option.id)"
+            style="margin: 2px;"
         >${option.name}</button>
 
         <!-- admin actions -->

@@ -1,35 +1,41 @@
 import { inject } from 'aurelia-framework';
 import { EventAggregator } from 'aurelia-event-aggregator';
-import { PollsStore } from '../../../shared/data/polls/polls-store';
 import { colors } from '../../../shared/config/colors';
 
-@inject(PollsStore, EventAggregator, colors)
+@inject(EventAggregator, colors)
 export class New {
-    public options: any[] = [];
-    public name: string = '';
+    public poll: any;
     public color: Function;
-    public optionName: string;
+    public newOption: string;
 
-    private collection: any;
     private ea: EventAggregator;
 
-    constructor (store: PollsStore, ea: EventAggregator, colors) {
-        this.collection = store.collection;
+    constructor (ea: EventAggregator, colors) {
         this.ea = ea;
         this.color = colors.standard;
+
+        this.poll = {
+            name: 'name',
+            options: []
+        };
     }
 
-    public addOption (name) {
-        this.options = this.options.concat([{
-            id: encodeURI(name),
+    public addOption (name = '') {
+        const { poll } = this;
+
+        const option = {
+            id: Date.now(),
             name,
             value: 1
-        }]);
-        this.optionName = '';
+        };
+        poll.options = poll.options.concat([option]);
+
+        this.newOption = '';
     }
 
-    public create (name, options) {
-        const poll = { name, options };
-        this.ea.publish('POLL_ADD', { poll });
+    public create (poll) {
+        const { name, options } = poll;
+        const slim = { name, options };
+        this.ea.publish('POLL_ADD', { poll: slim });
     }
 };

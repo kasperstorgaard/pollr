@@ -17,7 +17,7 @@ export class Polls {
         const newPage = {
             moduleId: './new/polls-new-page',
             name: 'new',
-            nav: true,
+            nav: false,
             route: 'new',
             title: 'new'
         };

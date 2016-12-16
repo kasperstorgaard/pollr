@@ -1,21 +1,11 @@
 <template>
-    <require from="../../../shared/components/view-options/view-options-component.html"></require>
-    <require from="../../../shared/components/info-card/info-card-component.html"></require>
     <require from="../../../shared/components/poll/poll-component"></require>
 
-    <poll-component
-        class="mdl-cell mdl-cell--4-col "
-        repeat.for="poll of polls"
-        poll.bind="poll"
-    ></poll-component>
-
-    <div class="demo-cards mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-grid mdl-grid--no-spacing">
-        <!-- card -->
-        <info-card></info-card>
-
-        <div class="demo-separator mdl-cell--1-col"></div>
-
-        <!-- view options -->
-        <view-options></view-options>
+    <div class="section--center mdl-grid">
+        <poll-component
+            class="mdl-card mdl-cell mdl-cell--4-col"
+            repeat.for="poll of polls"
+            poll.bind="poll"
+        ></poll-component>
     </div>
 </template>
