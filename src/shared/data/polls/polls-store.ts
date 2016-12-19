@@ -39,24 +39,35 @@ export class PollsStore {
     private vote (opts) {
         const { poll, optionId } = opts;
         const { options = [] } = poll;
-        const option = options.find(p => p.id === optionId);
-        option.value = (option.value || 0) + 1;
+        const idx = options.findIndex(p => p.id === optionId);
+        const option = options[idx];
 
-        this.collection.update(poll);
+        const newValue = (option.value || 0) + 1;
+        const newOption = Object.assign({}, option, { value: newValue });
+        const newOptions = [
+            ...options.slice(0, idx),
+            newOption,
+            ...options.slice(idx + 1)
+        ];
+        const newPoll = Object.assign({}, poll, { options: newOptions });
+
+        this.collection.update(newPoll);
     }
 
     private rename (opts) {
         const { poll, name } = opts;
-        poll.name = name;
 
-        this.collection.update(poll);
+        const newPoll = Object.assign({}, poll, { name });
+        this.collection.update(newPoll);
     }
 
     private reset (opts) {
         const { poll } = opts;
         const { options = [] } = poll;
-        options.forEach(o => o.value = 1);
 
-        this.collection.update(poll);
+        const newOptions = options.map(o => o.value = 1);
+        const newPoll = Object.assign({}, poll, { options: newOptions });
+
+        this.collection.update(newPoll);
     }
 }
