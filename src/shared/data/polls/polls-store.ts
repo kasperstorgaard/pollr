@@ -65,7 +65,7 @@ export class PollsStore {
         const { poll } = opts;
         const { options = [] } = poll;
 
-        const newOptions = options.map(o => o.value = 1);
+        const newOptions = options.map(o => Object.assign(o, { value: 1 }));
         const newPoll = Object.assign({}, poll, { options: newOptions });
 
         this.collection.update(newPoll);
