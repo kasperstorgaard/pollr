@@ -2,26 +2,20 @@
   "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": ".",
-    "rootDir": "src",
-    "target": "es5",
-    "module": "amd",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "moduleResolution": "node",
-    "sourceMap": true,
     "lib": ["es2015", "dom"],
-    "paths": {
-      "testdouble": ["custom_typings/testdouble"],
-      "src/*": ["src/*"]
-    },
-    "typeRoots" : ["node_modules"],
-    "types" : ["types.d3"],
-    "allowJs": true
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "rootDir": "src",
+    "sourceMap": true,
+    "sourceRoot": "src",
+    "target": "es5",
+    "typeRoots": ["./typings"]
   },
   "filesGlob": [
     "./src/**/*.ts",
-    "./test/**/*.ts",
-    "./jspm_packages/**/*.d.ts"
+    "./test/**/*.ts"
   ],
   "exclude": [
     "node_modules",

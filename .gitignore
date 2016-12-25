@@ -4,3 +4,5 @@ jspm_packages/
 .hz/secrets.toml
 **/*.log
 rethinkdb_data
+src/**/*.js.map
+src/**/*.js

@@ -8,7 +8,7 @@ export class DonutChartComponent {
     @bindable public keyProp: string = 'id';
     @bindable public nameProp: string = 'name';
     @bindable public valueProp: string = 'value';
-    @bindable public ratio: number = 0.75;
+    @bindable public ratio: number = 0.66;
 
     private d3;
     private element: HTMLElement;
@@ -103,19 +103,84 @@ export class DonutChartComponent {
 
         const { svg } = this;
 
-        const arcs = svg.selectAll('path')
+        const g = svg.selectAll('.arc')
             .data(this.pie(data))
             .enter()
-            .append('path')
-            .attr('d', this.arc)
-            .attr('fill', d => color(d.data[this.keyProp]));
+            .append('g')
+            .attr('class', 'arc');
 
-        arcs.transition()
+        const arcs = g.append('path')
+            .attr('d', this.arc)
+            .attr('fill', d => color(d.data[this.keyProp]))
+            .transition()
             .duration(1000)
             .attrTween('d', this.getArcTween(''))
             .on('end', () => this.saveArcs(arcs));
 
+        g.append('text')
+            .attr('transform', (d) => `translate(${this.arc.centroid(d)})`)
+            .attr('dy', '0.35em')
+            .text((d) => d.data.value);
+
         this.initialized = true;
+    }
+
+    private updatePaths (groups, data: any[], color: Function) {
+        const paths = groups.select('path');
+
+        const enter = paths.enter()
+            .append('path');
+
+        const exit = paths.exit();
+        const enterUpdate = enter.merge(paths);
+
+        enterUpdate
+            .attr('fill', d => color(d.data[this.keyProp]));
+
+        paths.transition()
+            .duration(600)
+            .attrTween('d', (d) => {
+                const prevArc = this.arcLookup[d.data[this.keyProp]];
+                const interpolate = this.d3.interpolateObject(prevArc, d);
+                return t => this.arc(interpolate(t));
+            })
+            .on('end', () => this.saveArcs(enterUpdate));
+
+        // enter
+        enter.transition()
+            .duration(600)
+            .attrTween('d', this.getArcTween('mid'));
+
+        // exit
+        exit.transition()
+            .duration(600)
+            .attrTween('d', this.getArcTween('midReverse'))
+            .remove();
+    }
+
+    private updateTexts (groups, data: any[]) {
+        const texts = groups.select('text');
+
+        const enter = texts.enter()
+            .append('text');
+
+        const enterUpdate = enter.merge(texts);
+        const exit = texts.exit();
+
+        enterUpdate.transition()
+            .duration(600)
+            .attrTween('transform', (d) => {
+                const prevArc = this.arcLookup[d.data[this.keyProp]];
+                const interpolate = this.d3.interpolateObject(prevArc, d);
+                return (t) => {
+                    const angle = interpolate(t);
+                    return `translate(${this.arc.centroid(angle)})`;
+                };
+            })
+            .attr('dy', '0.35em')
+            .text(d => d.data.value);
+
+        exit.remove();
     }
 
     /**
@@ -129,35 +194,18 @@ export class DonutChartComponent {
      * @memberOf DonutChartComponent
      */
     private update (svg, data: any[], color: Function) {
-        const arcs = svg.selectAll('path')
-            .data(this.pie(data));
+        const existing = svg.selectAll('.arc');
 
-        const exit = arcs.exit();
-        const enter = arcs.enter().append('path');
-        const enterUpdate = enter.merge(arcs);
+        const enter = existing
+            .data(this.pie(data))
+            .enter()
+            .append('g')
+            .attr('class', 'arc');
 
-        enterUpdate.attr('fill', d => color(d.data[this.keyProp]));
+        const all = existing.merge(enter);
 
-        // update
-        arcs.transition()
-            .duration(600)
-            .attrTween('d', (d) => {
-                const prevArc = this.arcLookup[d.data[this.keyProp]];
-                const interpolate = this.d3.interpolateObject(prevArc, d);
-                return t => this.arc(interpolate(t));
-            })
-            .on('end', () => this.saveArcs(enterUpdate));
-
-        // exit
-        exit.transition()
-            .duration(600)
-            .attrTween('d', this.getArcTween('midReverse'))
-            .remove();
-
-        // enter
-        enter.transition()
-            .duration(600)
-            .attrTween('d', this.getArcTween('mid'));
+        this.updatePaths(all, data, color);
+        this.updateTexts(all, data);
     }
 
     /**

@@ -5,10 +5,10 @@
   "main": "index.js",
   "scripts": {
     "horizon": "hz serve --start-rethinkdb --secure no --permissions no --auto-create-collection --auto-create-index",
-    "serve": "node ./build/serve.js",
     "jspm": "jspm install",
+    "serve": "node ./build/serve.js",
     "start": "concurrently --kill-others \"npm run horizon\" \"npm run serve\"",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "concurrently --kill-others \"tsc --watch\" \"ava --watch\""
   },
   "repository": {
     "type": "git",
@@ -36,6 +36,7 @@
       "@horizon/client": "npm:@horizon/client@^2.0.0",
       "aurelia-bootstrapper": "npm:aurelia-bootstrapper@^1.0.1",
       "aurelia-mdl-plugin": "npm:aurelia-mdl-plugin@^0.1.16",
+      "ava": "npm:ava@^0.17.0",
       "css": "github:systemjs/plugin-css@^0.1.32",
       "d3": "npm:d3@^4.4.0",
       "d3-selection": "npm:d3-selection@^1.0.3",
@@ -43,10 +44,10 @@
       "material-design-lite": "github:google/material-design-lite@^1.2.1",
       "plugin-typescript": "github:frankwallis/plugin-typescript@^5.3.1",
       "rxjs": "npm:rxjs@5.0.0-beta.11",
-      "text": "github:systemjs/plugin-text@^0.0.9",
-      "typescript": "npm:typescript@^2.0.10"
+      "text": "github:systemjs/plugin-text@^0.0.9"
     },
     "devDependencies": {
+      "testdouble": "npm:testdouble@^1.10.1",
       "ts": "github:frankwallis/plugin-typescript@^5.3.1"
     },
     "peerDependencies": {
@@ -73,28 +74,48 @@
       "aurelia-templating-binding": "npm:aurelia-templating-binding@^1.0.0",
       "aurelia-templating-resources": "npm:aurelia-templating-resources@^1.0.0",
       "aurelia-templating-router": "npm:aurelia-templating-router@^1.0.0",
+      "bcrypt-pbkdf": "npm:bcrypt-pbkdf@^1.0.0",
       "buffer": "npm:jspm-nodelibs-buffer@^0.2.0",
       "child_process": "npm:jspm-nodelibs-child_process@^0.2.0",
       "constants": "npm:jspm-nodelibs-constants@^0.2.0",
       "crypto": "npm:jspm-nodelibs-crypto@^0.2.0",
+      "dgram": "npm:jspm-nodelibs-dgram@^0.2.0",
+      "dns": "npm:jspm-nodelibs-dns@^0.2.0",
+      "ecc-jsbn": "npm:ecc-jsbn@~0.1.1",
       "events": "npm:jspm-nodelibs-events@^0.2.0",
       "fs": "npm:jspm-nodelibs-fs@^0.2.0",
+      "fsevents": "npm:fsevents@^1.0.0",
       "http": "npm:jspm-nodelibs-http@^0.2.0",
       "https": "npm:jspm-nodelibs-https@^0.2.0",
+      "jodid25519": "npm:jodid25519@^1.0.0",
+      "jsbn": "npm:jsbn@0.1",
       "module": "npm:jspm-nodelibs-module@^0.2.0",
       "net": "npm:jspm-nodelibs-net@^0.2.0",
       "os": "npm:jspm-nodelibs-os@^0.2.0",
       "path": "npm:jspm-nodelibs-path@^0.2.0",
       "process": "npm:jspm-nodelibs-process@^0.2.0",
+      "querystring": "npm:jspm-nodelibs-querystring@^0.2.0",
       "stream": "npm:jspm-nodelibs-stream@^0.2.0",
       "string_decoder": "npm:jspm-nodelibs-string_decoder@^0.2.0",
       "tls": "npm:jspm-nodelibs-tls@^0.2.0",
+      "tty": "npm:jspm-nodelibs-tty@^0.2.0",
+      "tweetnacl": "npm:tweetnacl@0.14",
       "url": "npm:jspm-nodelibs-url@^0.2.0",
       "util": "npm:jspm-nodelibs-util@^0.2.0",
       "vm": "npm:jspm-nodelibs-vm@^0.2.0",
       "zlib": "npm:jspm-nodelibs-zlib@^0.2.0"
     },
     "overrides": {
+      "npm:bluebird@3.4.6": {
+        "meta": {
+          "js/browser/bluebird.js": {
+            "format": "global"
+          },
+          "js/browser/bluebird.min.js": {
+            "format": "global"
+          }
+        }
+      },
       "npm:browserify-zlib@0.1.4": {
         "dependencies": {
           "readable-stream": "^2.0.2",
@@ -104,10 +125,73 @@
           "_stream_transform": "readable-stream/transform"
         }
       },
+      "npm:debug@2.2.0": {
+        "main": "browser.js",
+        "jspmNodeConversion": false,
+        "format": "cjs",
+        "map": {
+          "./browser.js": {
+            "node": "./node.js"
+          },
+          "./node.js": {
+            "browser": "./browser.js"
+          },
+          "fs": "@node/fs",
+          "net": "@node/net",
+          "tty": "@node/tty",
+          "util": "@node/util"
+        }
+      },
+      "npm:debug@2.5.1": {
+        "main": "browser.js",
+        "jspmNodeConversion": false,
+        "format": "cjs",
+        "map": {
+          "./browser.js": {
+            "node": "./node.js"
+          },
+          "./node.js": {
+            "browser": "./browser.js"
+          },
+          "fs": "@node/fs",
+          "net": "@node/net",
+          "tty": "@node/tty",
+          "util": "@node/util"
+        }
+      },
       "npm:inherits@2.0.3": {
         "ignore": [
           "test.js"
         ]
+      },
+      "npm:lodash@4.17.2": {
+        "map": {
+          "buffer": "@empty",
+          "process": "@empty"
+        }
+      },
+      "npm:ms@0.7.1": {
+        "jspmNodeConversion": false,
+        "format": "cjs"
+      },
+      "npm:ms@0.7.2": {
+        "jspmNodeConversion": false,
+        "format": "cjs"
+      },
+      "npm:readable-stream@1.1.14": {
+        "map": {
+          "stream": "stream-browserify/index"
+        },
+        "systemjs": {
+          "main": "readable.js"
+        },
+        "dependencies": {
+          "core-util-is": "~1.0.0",
+          "inherits": "~2.0.1",
+          "isarray": "0.0.1",
+          "string_decoder": "~0.10.0",
+          "stream-browserify": "^1.0.0"
+        }
       },
       "npm:typescript@2.1.1": {
         "browser": {},
@@ -137,6 +221,8 @@
     "@types/d3": "^4.3.0",
     "@types/d3-scale": "^1.0.4",
     "@types/d3-selection": "^1.0.5",
-    "types.d3": "^0.1.1"
+    "ts-node": "^1.7.2",
+    "types.d3": "^0.1.1",
+    "typescript": "^2.1.4"
   }
 }

@@ -1,0 +1,7 @@
+{
+    "name": "TestName",
+    "version": false,
+    "globalDependencies": {
+        "ava": "file:jspm_package/npm/ava@0.17.0/types/generated.d.ts"
+    }
+}
