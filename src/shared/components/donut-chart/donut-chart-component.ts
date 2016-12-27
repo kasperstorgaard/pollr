@@ -11,17 +11,15 @@ export class DonutChartComponent {
     @bindable public ratio: number = 0.66;
 
     private d3;
-    private element: HTMLElement;
-    private arc: Function;
-    private pie: Function;
-    private svg;
+    private host: HTMLElement;
+    private elements: any;
     private size: number;
     private arcLookup: Object = {};
     private initialized: boolean;
 
-    constructor (d3lib, element: HTMLElement) {
+    constructor (d3lib, host: HTMLElement) {
         this.d3 = d3lib;
-        this.element = element;
+        this.host = host;
     }
 
     /**
@@ -31,11 +29,12 @@ export class DonutChartComponent {
      * @memberOf DonutChartComponent
      */
     public attached () {
-        const rect = this.element.getBoundingClientRect();
+        const rect = this.host.getBoundingClientRect();
         this.size = Math.floor(rect.width);
 
         if (this.chartData && !this.initialized) {
-            this.initialize(this.chartData, this.color);
+            this.elements = this.createElements(this.host, this.size);
+            this.initialize(this.elements, this.chartData, this.color);
         }
     }
 
@@ -53,12 +52,13 @@ export class DonutChartComponent {
             return;
         }
 
-        if (!this.svg) {
-            this.initialize(data, this.color);
+        if (!this.elements) {
+            this.elements = this.createElements(this.host, this.size);
+            this.initialize(this.elements, data, this.color);
             return;
         }
 
-        this.update(this.svg, data, this.color);
+        this.update(this.elements, data, this.color);
     }
 
     /**
@@ -70,142 +70,154 @@ export class DonutChartComponent {
      *
      * @memberOf DonutChartComponent
      */
-    private createElements (element: HTMLElement, size: number) {
+    private createElements (host: HTMLElement, size: number) {
         const radius = size / 2;
-        this.arc = this.d3.arc()
+        const arc = this.d3.arc()
             .outerRadius(radius)
             .innerRadius(radius * this.ratio);
 
-        this.pie = this.d3.pie()
+        const pie = this.d3.pie()
             .value((d: any) => d[this.valueProp])
             .sort(null)
             .padAngle(0.05);
 
-        this.svg = this.d3.select(element).append('svg')
+        const svg = this.d3.select(host).append('svg')
             .attr('width', size)
             .attr('height', size)
             .append('g')
             .attr('transform', `translate(${radius},${radius})`);
+
+        return { arc, pie, svg };
     }
 
-    /**
-     * sets up the chart, including enter animations
-     *
-     * @private
-     * @param {any} svg
-     * @param {any} data
-     * @param {any} color
-     *
-     * @memberOf DonutChartComponent
-     */
-    private initialize (data, color) {
-        this.createElements(this.element, this.size);
-
-        const { svg } = this;
-
-        const g = svg.selectAll('.arc')
-            .data(this.pie(data))
-            .enter()
-            .append('g')
-            .attr('class', 'arc');
-
-        const arcs = g.append('path')
-            .attr('d', this.arc)
+    private addPaths (paths, arc: Function, color: Function) {
+        return paths
             .attr('fill', d => color(d.data[this.keyProp]))
             .transition()
             .duration(1000)
-            .attrTween('d', this.getArcTween(''))
-            .on('end', () => this.saveArcs(arcs));
-
-        g.append('text')
-            .attr('transform', (d) => `translate(${this.arc.centroid(d)})`)
-            .attr('dy', '0.35em')
-            .text((d) => d.data.value);
-
-        this.initialized = true;
+            .attrTween('d', this.getArcTween('start', arc))
+            .on('end', () => this.saveArcs(paths));
     }
 
-    private updatePaths (groups, data: any[], color: Function) {
-        const paths = groups.select('path');
-
-        const enter = paths.enter()
-            .append('path');
-
-        const exit = paths.exit();
-        const enterUpdate = enter.merge(paths);
-
-        enterUpdate
-            .attr('fill', d => color(d.data[this.keyProp]));
+    private updatePaths (paths, arc: Function, color: Function) {
+        paths.attr('fill', d => color(d.data[this.keyProp]));
 
         paths.transition()
             .duration(600)
             .attrTween('d', (d) => {
                 const prevArc = this.arcLookup[d.data[this.keyProp]];
                 const interpolate = this.d3.interpolateObject(prevArc, d);
-                return t => this.arc(interpolate(t));
+                return t => arc(interpolate(t));
             })
-            .on('end', () => this.saveArcs(enterUpdate));
+            .on('end', () => this.saveArcs(paths));
+    }
 
-        // enter
-        enter.transition()
+    private removePaths (paths, arc: Function) {
+        paths.transition()
+            .delay(300)
             .duration(600)
-            .attrTween('d', this.getArcTween('mid'));
-
-        // exit
-        exit.transition()
-            .duration(600)
-            .attrTween('d', this.getArcTween('midReverse'))
+            .attrTween('d', this.getArcTween('midReverse', arc))
             .remove();
     }
 
-    private updateTexts (groups, data: any[]) {
-        const texts = groups.select('text');
+    private addTexts (texts, arc) {
+        return texts
+            .text(d => d.data.value)
+            .style('fill-opacity', 1e-6)
+            .style('text-anchor', 'middle')
+            .style('fill', 'white')
+            .attr('transform', (d) => `translate(${arc.centroid(d)})`)
+            .attr('dy', '0.3em')
+            .transition()
+            .delay(800)
+            .duration(500)
+            .style('fill-opacity', 1);
+    }
 
-        const enter = texts.enter()
-            .append('text');
-
-        const enterUpdate = enter.merge(texts);
-        const exit = texts.exit();
-
-        enterUpdate.transition()
+    private updateTexts (texts, arc) {
+        texts
+            .text(d => d.data.value)
+            .transition()
             .duration(600)
             .attrTween('transform', (d) => {
                 const prevArc = this.arcLookup[d.data[this.keyProp]];
                 const interpolate = this.d3.interpolateObject(prevArc, d);
                 return (t) => {
                     const angle = interpolate(t);
-                    return `translate(${this.arc.centroid(angle)})`;
+                    return `translate(${arc.centroid(angle)})`;
                 };
-            })
-            .attr('dy', '0.35em')
-            .text(d => d.data.value);
+            });
+    }
 
-        exit.remove();
+    private removeTexts (texts, arc) {
+        texts.transition()
+            .duration(600)
+            .style('fill-opacity', 1e-6)
+            .remove();
+    }
+
+    /**
+     * sets up the chart, including enter animations
+     *
+     * @private
+     * @param {any} elements
+     * @param {any} data
+     * @param {any} color
+     *
+     * @memberOf DonutChartComponent
+     */
+    private initialize (elements, data, color) {
+        const { svg, pie, arc } = elements;
+
+        const g = svg.selectAll('.arc')
+            .data(pie(data))
+            .enter()
+            .append('g')
+            .attr('class', 'arc');
+
+        this.addPaths(g.append('path'), arc, color);
+        this.addTexts(g.append('text'), arc);
+
+        this.initialized = true;
     }
 
     /**
      * redraws the chart
      *
      * @private
-     * @param {any} svg
+     * @param {any} elements
      * @param {any} data
      * @param {any} color
      *
      * @memberOf DonutChartComponent
      */
-    private update (svg, data: any[], color: Function) {
+    private update (elements, data: any[], color: Function) {
+        const { svg, pie, arc } = elements;
         const existing = svg.selectAll('.arc');
 
         const enter = existing
-            .data(this.pie(data))
+            .data(pie(data))
             .enter()
             .append('g')
             .attr('class', 'arc');
 
-        const all = existing.merge(enter);
+        enter.append('path');
+        enter.append('text');
 
-        this.updatePaths(all, data, color);
-        this.updateTexts(all, data);
+        const exit = existing.exit();
+
+        const all = existing.size() ?
+            existing.merge(enter) : enter.merge(existing);
+
+        this.updatePaths(all.select('path'), arc, color);
+        this.removePaths(exit.select('path'), arc);
+
+        this.updateTexts(all.select('text'), arc);
+        this.removeTexts(exit.select('text'), arc);
+
+        exit.transition()
+            .duration(600)
+            .remove();
     }
 
     /**
@@ -226,12 +238,12 @@ export class DonutChartComponent {
         });
     }
 
-    private getArcTween (type: string = 'start') {
+    private getArcTween (type: string = 'start', arc) {
         if (type === 'start') {
             return (d) => {
                 const startObj = { endAngle: 0, startAngle: 0 };
                 const interpolate = this.d3.interpolateObject(startObj, d);
-                return t => this.arc(interpolate(t));
+                return t => arc(interpolate(t));
             };
         }
 
@@ -240,7 +252,7 @@ export class DonutChartComponent {
                 const mid = (d.endAngle + d.startAngle) / 2;
                 const midObj = { endAngle: mid, startAngle: mid };
                 const interpolate = this.d3.interpolateObject(midObj, d);
-                return t => this.arc(interpolate(t));
+                return t => arc(interpolate(t));
             };
         }
 
@@ -249,7 +261,7 @@ export class DonutChartComponent {
                 const mid = (d.endAngle + d.startAngle) / 2;
                 const midObj = { endAngle: mid, startAngle: mid };
                 const interpolate = this.d3.interpolateObject(d, midObj);
-                return t => this.arc(interpolate(t));
+                return t => arc(interpolate(t));
             };
         }
     }
