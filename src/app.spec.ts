@@ -9,8 +9,10 @@ import { History } from 'aurelia-history';
 class RouterStub extends Router {}
 
 function setup () {
+  const container = td.object(Container);
+  const history = td.object(History);
   const config = td.object(RouterConfiguration);
-  const router = new RouterStub(new Container(), new History());
+  const router = new RouterStub(container, history);
 
   return { config, router, sut: new App() };
 }
@@ -36,7 +38,7 @@ test('app.configureRouter(): config.map', (t) => {
 
   t.doesNotThrow(() => {
     td.verify(config.map(td.matchers.anything()));
-  }, /.+/, 'should call config.map');
+  }, /.*/, 'should call config.map');
 
   t.end();
   cleanup();
