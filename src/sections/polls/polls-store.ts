@@ -1,76 +1,66 @@
+import './polls-dispatcher';
+
 import { inject } from 'aurelia-framework';
 import { HorizonClient } from '../../shared/horizon-client';
 import { EventAggregator } from 'aurelia-event-aggregator';
 
 @inject(HorizonClient, EventAggregator)
 export class PollsStore {
-    public collection: any;
+    public state: any[] = []; // TODO: change to Array<Poll>
     private ea: EventAggregator;
+    private subscribers: any[];
 
     constructor (client: HorizonClient, ea: EventAggregator) {
-        this.collection = client.getCollection('polls');
         this.ea = ea;
-        this.subscribe();
+        this.subscribe(client);
     }
 
-    private subscribe () {
-        const { actions } = this;
-        const keys = Object.keys(actions);
-        keys.forEach(key => this.ea.subscribe(key, actions[key].bind(this)));
+    private subscribe (client) {
+        const collection = client.getCollection('polls');
+        const stream = collection.watch({ rawChanges: true });
+        this.subscribers = this.subscribeToStream(stream);
     }
 
-    private get actions () {
-        return {
-            POLL_ADD: this.add,
-            POLL_REMOVE: this.remove,
-            POLL_RENAME: this.rename,
-            POLL_RESET: this.reset,
-            POLL_VOTE: this.vote,
-        };
+    private onAdded (poll) {
+        this.state.push(poll);
     }
 
-    private add (opts) {
-        const { poll } = opts;
-        this.collection.store(poll);
+    private onRemoved (poll) {
+        const idx = this.state.findIndex(p => p.id === poll.id);
+        if (!idx) {
+            return;
+        }
+        this.state.splice(idx, 1);
     }
 
-    private remove (opts) {
-        const { poll } = opts;
-        this.collection.remove(poll.id);
+    private onUpdated (poll) {
+        const existing = this.state.find(p => p.id === poll.id);
+        if (!existing) {
+            return;
+        }
+        Object.assign(existing, poll);
     }
 
-    private vote (opts) {
-        const { poll, optionId } = opts;
-        const { options = [] } = poll;
-        const idx = options.findIndex(p => p.id === optionId);
-        const option = options[idx];
+    private subscribeToStream (changesStream) {
+        const added = changesStream
+            .defaultIfEmpty()
+            .filter(c => !c.old_val && c.new_val)
+            .map(c => c.new_val);
 
-        const newValue = (option.value || 0) + 1;
-        const newOption = Object.assign({}, option, { value: newValue });
-        const newOptions = [
-            ...options.slice(0, idx),
-            newOption,
-            ...options.slice(idx + 1)
+        const removed = changesStream
+            .defaultIfEmpty()
+            .filter(c => c.old_val && !c.new_val)
+            .map(c => c.old_val);
+
+        const updated = changesStream
+            .defaultIfEmpty()
+            .filter(c => c.old_val && c.new_val)
+            .map(c => c.new_val);
+
+        return [
+            added.subscribe(this.onAdded.bind(this)),
+            removed.subscribe(this.onRemoved.bind(this)),
+            updated.subscribe(this.onUpdated.bind(this))
         ];
-        const newPoll = Object.assign({}, poll, { options: newOptions });
-
-        this.collection.update(newPoll);
-    }
-
-    private rename (opts) {
-        const { poll, name } = opts;
-
-        const newPoll = Object.assign({}, poll, { name });
-        this.collection.update(newPoll);
-    }
-
-    private reset (opts) {
-        const { poll } = opts;
-        const { options = [] } = poll;
-
-        const newOptions = options.map(o => Object.assign(o, { value: 1 }));
-        const newPoll = Object.assign({}, poll, { options: newOptions });
-
-        this.collection.update(newPoll);
     }
 }
