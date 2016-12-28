@@ -52,6 +52,8 @@
       "text": "github:systemjs/plugin-text@^0.0.9"
     },
     "devDependencies": {
+      "graceful-fs": "npm:graceful-fs@^4.1.6",
+      "sass": "github:mobilexag/plugin-sass@^0.5.1",
       "tape": "npm:tape@^4.6.3",
       "testdouble": "github:testdouble/testdouble.js@master",
       "ts": "github:frankwallis/plugin-typescript@^5.3.1"
@@ -200,6 +202,16 @@
           "isarray": "0.0.1",
           "string_decoder": "~0.10.0",
           "stream-browserify": "^1.0.0"
+        }
+      },
+      "npm:sass.js@0.9.13": {
+        "map": {
+          "ws": "@empty"
+        },
+        "meta": {
+          "dist/sass.worker.js": {
+            "format": "global"
+          }
         }
       },
       "npm:typescript@2.1.1": {

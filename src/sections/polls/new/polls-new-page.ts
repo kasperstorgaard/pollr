@@ -4,9 +4,9 @@ import { colors } from '../../../shared/config/colors';
 
 @inject(EventAggregator, colors.standard)
 export class New {
-    public poll: any;
     public color: Function;
-    public newOption: string;
+    public name: string = 'name';
+    public options: any[] = [];
 
     private ea: EventAggregator;
 
@@ -14,28 +14,34 @@ export class New {
         this.ea = ea;
         this.color = color;
 
-        this.poll = {
-            name: 'name',
-            options: []
-        };
+        this.addOption();
     }
 
-    public addOption (name = '') {
-        const { poll } = this;
-
+    public addOption () {
+        const name = `option ${this.options.length + 1}`;
         const option = {
             id: Date.now(),
             name,
             value: 1
         };
-        poll.options = poll.options.concat([option]);
-
-        this.newOption = '';
+        this.options = this.options.concat([option]);
     }
 
-    public create (poll) {
-        const { name, options } = poll;
-        const slim = { name, options };
-        this.ea.publish('POLL_ADD', { poll: slim });
+    public removeOption (id) {
+        this.options = this.options.filter(o => o.id !== id);
+    }
+
+    public create (name, options) {
+        const poll = { name, options: this.slimOptions(options) };
+        this.ea.publish('POLL_ADD', { poll });
+    }
+
+    public get preview () {
+        const { name, options } = this;
+        return { name, options };
+    }
+
+    private slimOptions (options) {
+        return options.map(o => ({ id: o.id, name: o.name, value: o.value }));
     }
 };

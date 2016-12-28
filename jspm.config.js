@@ -10,7 +10,9 @@ SystemJS.config({
     "map": {
       "ts": "github:frankwallis/plugin-typescript@5.3.1",
       "testdouble": "github:testdouble/testdouble.js@master",
-      "tape": "npm:tape@4.6.3"
+      "tape": "npm:tape@4.6.3",
+      "sass": "github:mobilexag/plugin-sass@0.5.1",
+      "graceful-fs": "npm:graceful-fs@4.1.11"
     },
     "packages": {
       "npm:tape@4.6.3": {
@@ -72,6 +74,83 @@ SystemJS.config({
           "is-symbol": "npm:is-symbol@1.0.1",
           "is-date-object": "npm:is-date-object@1.0.1"
         }
+      },
+      "github:mobilexag/plugin-sass@0.5.1": {
+        "map": {
+          "css-url-rewriter-ex": "npm:css-url-rewriter-ex@1.0.6",
+          "css-asset-copier": "npm:css-asset-copier@1.0.2",
+          "postcss": "npm:postcss@5.2.8",
+          "sass.js": "npm:sass.js@0.9.13",
+          "autoprefixer": "npm:autoprefixer@6.6.0",
+          "fs": "github:jspm/nodelibs-fs@0.1.2",
+          "url": "github:jspm/nodelibs-url@0.1.0",
+          "path": "github:jspm/nodelibs-path@0.1.0",
+          "reqwest": "github:ded/reqwest@2.0.5"
+        }
+      },
+      "npm:autoprefixer@6.6.0": {
+        "map": {
+          "postcss": "npm:postcss@5.2.8",
+          "num2fraction": "npm:num2fraction@1.2.2",
+          "normalize-range": "npm:normalize-range@0.1.2",
+          "postcss-value-parser": "npm:postcss-value-parser@3.3.0",
+          "browserslist": "npm:browserslist@1.5.1",
+          "caniuse-db": "npm:caniuse-db@1.0.30000602"
+        }
+      },
+      "npm:css-url-rewriter-ex@1.0.6": {
+        "map": {
+          "babel-runtime": "npm:babel-runtime@6.20.0"
+        }
+      },
+      "npm:css-asset-copier@1.0.2": {
+        "map": {
+          "babel-runtime": "npm:babel-runtime@6.20.0",
+          "fs-extra": "npm:fs-extra@0.30.0"
+        }
+      },
+      "npm:postcss@5.2.8": {
+        "map": {
+          "supports-color": "npm:supports-color@3.1.2",
+          "chalk": "npm:chalk@1.1.3",
+          "source-map": "npm:source-map@0.5.6",
+          "js-base64": "npm:js-base64@2.1.9"
+        }
+      },
+      "npm:supports-color@3.1.2": {
+        "map": {
+          "has-flag": "npm:has-flag@1.0.0"
+        }
+      },
+      "npm:fs-extra@0.30.0": {
+        "map": {
+          "rimraf": "npm:rimraf@2.5.4",
+          "path-is-absolute": "npm:path-is-absolute@1.0.1",
+          "graceful-fs": "npm:graceful-fs@4.1.11",
+          "jsonfile": "npm:jsonfile@2.4.0",
+          "klaw": "npm:klaw@1.3.1"
+        }
+      },
+      "npm:browserslist@1.5.1": {
+        "map": {
+          "caniuse-db": "npm:caniuse-db@1.0.30000602"
+        }
+      },
+      "github:jspm/nodelibs-url@0.1.0": {
+        "map": {
+          "url": "npm:url@0.10.3"
+        }
+      },
+      "npm:url@0.10.3": {
+        "map": {
+          "querystring": "npm:querystring@0.2.0",
+          "punycode": "npm:punycode@1.3.2"
+        }
+      },
+      "github:jspm/nodelibs-path@0.1.0": {
+        "map": {
+          "path-browserify": "npm:path-browserify@0.0.0"
+        }
       }
     }
   },
@@ -85,6 +164,12 @@ SystemJS.config({
         },
         "*.css": {
           "loader": "css"
+        },
+        "*.scss": {
+          "loader": "sass"
+        },
+        "*.sass": {
+          "loader": "sass"
         }
       }
     }

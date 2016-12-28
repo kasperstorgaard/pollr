@@ -1,0 +1,36 @@
+.polls-new-page {
+    .flex {
+        display: flex;
+
+        &.flex--rows {
+            flex-flow: row wrap;
+        }
+
+        &.flex--split {
+            justify-content: space-between;
+        }
+
+        &.flex--align-end {
+            align-items: flex-end;
+        }
+    }
+
+    .flex-item {
+        &.flex-item--full-width {
+            flex: 1 100%;
+        }
+
+        &.flex-item--grow {
+            flex-grow: 1;
+        }
+    }
+
+    .polls-new-page__cell {
+        padding: 16px;
+        background: white;
+    }
+
+    .polls-new-page__actions {
+        margin-top: 24px;
+    }
+}

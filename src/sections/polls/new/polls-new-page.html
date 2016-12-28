@@ -1,70 +1,65 @@
 <template>
+    <require from="./polls-new-page.scss"></require>
     <require from="../../../shared/components/poll/poll-component"></require>
-    <section class="section--center mdl-grid">
-        <div class="mdl-cell mdl-cell--12-col"
-            style="padding: 16px; background: white"
-        >
-        <h3>Create a new poll</h3>
+    <section class="polls-new-page
+        section--center mdl-grid">
+        <div class="polls-new-page__cell
+            mdl-cell mdl-cell--12-col">
+            <h3>Create a new poll</h3>
         </div>
-        <div class="mdl-cell mdl-cell--8-col"
-            style="padding: 16px; background: white"
+        <div class="polls-new-page__cell
+            mdl-cell mdl-cell--8-col flex flex--rows"
         >
-            <div>
+            <div class="flex-item flex-item--full-width">
                 <div class="mdl-textfield mdl-textfield--full-width
                     mdl-js-textfield mdl-textfield--floating-label"
                 >
                     <input class="mdl-textfield__input"
                         type="text"
                         id="name"
-                        value.two-way="poll.name">
+                        value.two-way="name">
                     <label class="mdl-textfield__label"
                         for="name"
                     >name</label>
                 </div>
-            </div>
-            <div repeat.for="option of poll.options">
-                <div class="mdl-textfield mdl-textfield--full-width
-                    mdl-js-textfield"
-                >
-                    <input class="mdl-textfield__input"
-                        type="text"
-                        id="option"
-                        value.two-way="option.name"
+                <div repeat.for="option of options"
+                    class="flex">
+                    <div class="mdl-textfield mdl-textfield--full-width
+                        mdl-js-textfield flex-item flex-item--grow"
                     >
+                        <input class="mdl-textfield__input"
+                            type="text"
+                            id="option"
+                            value.two-way="option.name"
+                        >
+                    </div>
+                    <button class="mdl-button mdl-button--fab mdl-button--mini-fab
+                        mdl-button--colored"
+                        style="margin-left: 32px"
+                        click.trigger="removeOption(option.id)"
+                    >
+                        <i class="material-icons">delete</i>
+                    </button>
                 </div>
             </div>
-            <div style="display: flex">
-                <div class="mdl-textfield mdl-js-textfield
-                    mdl-textfield--floating-label"
-                    style="flex-grow: 1"
-                >
-                    <input class="mdl-textfield__input"
-                        type="text"
-                        id="option"
-                        value.two-way="newOption"
-                    >
-                    <label class="mdl-textfield__label"
-                        for="option"
-                    >option</label>
-                </div>
-                <button bind.if="!option.id"
-                    click.trigger="addOption(newOption)"
-                    class="mdl-button mdl-js-button mdl-button--fab
-                    mdl-button--mini-fab mdl-button--colored mdl-js-ripple-effect"
-                    style="margin-left: 32px"
-                >
-                    <i class="material-icons">add</i>
-                </button>
+            <div class="polls-new-page__actions
+                flex-item flex-item--full-width
+                flex flex--split flex--align-end">
+                <button class="mdl-button mdl-button--raised
+                    mdl-js-button mdl-js-ripple-effect"
+                    click.trigger="addOption()"
+                >add new option</button>
+                <button class="mdl-button mdl-button--raised
+                    mdl-js-button mdl-js-ripple-effect
+                    mdl-button--primary"
+                    click.trigger="create(name, options)"
+                >create</button>
             </div>
-            <button class="mdl-button mdl-button--raised
-                mdl-js-button mdl-js-ripple-effect"
-                style="margin-top: 32px"
-                click.trigger="create(poll)"
-            >Create</button>
         </div>
         <poll-component
-            class="mdl-card mdl-cell mdl-cell--4-col"
-            poll.bind="poll"
+            class="polls-new-page__cell
+                mdl-card mdl-cell mdl-cell--4-col"
+            poll.bind="preview"
         ></poll-component>
     </section>
 </template>
