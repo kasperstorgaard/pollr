@@ -1,16 +1,9 @@
-import { inject } from 'aurelia-framework';
 import { Router, RouterConfiguration } from 'aurelia-router';
-import { RootStore } from './shared/data/root-store';
+import './shared/data/stores';
 
-@inject(RootStore)
 export class App {
   public heading = 'pollr';
   public router: Router;
-  public rootStore: RootStore;
-
-  constructor (rootStore: RootStore) {
-    this.rootStore = rootStore;
-  }
 
   public configureRouter(config: RouterConfiguration, router: Router) {
     config.title = 'pollr';

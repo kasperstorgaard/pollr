@@ -2,21 +2,24 @@ import { inject } from 'aurelia-framework';
 import { HorizonClient } from '../horizon-client';
 import { EventAggregator } from 'aurelia-event-aggregator';
 
-@inject(HorizonClient)
+@inject(HorizonClient, EventAggregator)
 export class PollsStore {
     public collection: any;
+    private ea: EventAggregator;
 
-    constructor (client: HorizonClient) {
+    constructor (client: HorizonClient, ea: EventAggregator) {
         this.collection = client.getCollection('polls');
+        this.ea = ea;
+        this.subscribe();
     }
 
-    public subscribe (ea: EventAggregator) {
+    private subscribe () {
         const { actions } = this;
         const keys = Object.keys(actions);
-        keys.forEach(key => ea.subscribe(key, actions[key].bind(this)));
+        keys.forEach(key => this.ea.subscribe(key, actions[key].bind(this)));
     }
 
-    get actions() {
+    private get actions () {
         return {
             POLL_ADD: this.add,
             POLL_REMOVE: this.remove,
