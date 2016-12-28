@@ -94,18 +94,21 @@ export class DonutChartComponent {
         return paths
             .attr('fill', d => color(d.data[this.keyProp]))
             .transition()
-            .duration(1000)
+            .duration(600)
             .attrTween('d', this.getArcTween('start', arc))
             .on('end', () => this.saveArcs(paths));
     }
 
     private updatePaths (paths, arc: Function, color: Function) {
-        paths.attr('fill', d => color(d.data[this.keyProp]));
-
-        paths.transition()
+        paths
+            .attr('fill', d => color(d.data[this.keyProp]))
+            .transition()
             .duration(600)
             .attrTween('d', (d) => {
                 const prevArc = this.arcLookup[d.data[this.keyProp]];
+                if (!prevArc) {
+                    return this.getArcTween('start', arc)(d);
+                }
                 const interpolate = this.d3.interpolateObject(prevArc, d);
                 return t => arc(interpolate(t));
             })
@@ -129,14 +132,16 @@ export class DonutChartComponent {
             .attr('transform', (d) => `translate(${arc.centroid(d)})`)
             .attr('dy', '0.3em')
             .transition()
-            .delay(800)
-            .duration(500)
+            .delay(300)
+            .duration(600)
             .style('fill-opacity', 1);
     }
 
     private updateTexts (texts, arc) {
         texts
             .text(d => d.data.value)
+            .style('text-anchor', 'middle')
+            .style('fill', 'white')
             .transition()
             .duration(600)
             .attrTween('transform', (d) => {
@@ -201,23 +206,28 @@ export class DonutChartComponent {
             .append('g')
             .attr('class', 'arc');
 
-        enter.append('path');
-        enter.append('text');
+        const addedPaths = enter.append('path');
+        const addedTexts = enter.append('text');
 
         const exit = existing.exit();
 
-        const all = existing.size() ?
-            existing.merge(enter) : enter.merge(existing);
-
-        this.updatePaths(all.select('path'), arc, color);
         this.removePaths(exit.select('path'), arc);
-
-        this.updateTexts(all.select('text'), arc);
         this.removeTexts(exit.select('text'), arc);
 
         exit.transition()
             .duration(600)
             .remove();
+
+        if (!existing.size()) {
+            this.addPaths(addedPaths, arc, color);
+            this.addTexts(addedTexts, arc);
+            return;
+        }
+
+        const allPaths = addedPaths.merge(existing.select('path'));
+        const allTexts = addedTexts.merge(existing.select('text'));
+        this.updatePaths(allPaths, arc, color);
+        this.updateTexts(allTexts, arc);
     }
 
     /**
