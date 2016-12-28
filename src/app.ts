@@ -12,7 +12,7 @@ export class App {
       moduleId: './sections/polls/polls-page',
       name: 'polls',
       nav: true,
-      route: 'polls',
+      route: ['', 'polls'],
       settings: { icon: 'insert_chart' },
       title: 'Polls'
     };
