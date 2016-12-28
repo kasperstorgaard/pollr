@@ -2,7 +2,7 @@ import { inject } from 'aurelia-framework';
 import { EventAggregator } from 'aurelia-event-aggregator';
 import { colors } from '../../../shared/config/colors';
 
-@inject(EventAggregator, colors)
+@inject(EventAggregator, colors.standard)
 export class New {
     public poll: any;
     public color: Function;
@@ -10,9 +10,9 @@ export class New {
 
     private ea: EventAggregator;
 
-    constructor (ea: EventAggregator, colors) {
+    constructor (ea: EventAggregator, color) {
         this.ea = ea;
-        this.color = colors.standard;
+        this.color = color;
 
         this.poll = {
             name: 'name',
