@@ -95,7 +95,7 @@ export class DonutChartComponent {
             .attr('fill', d => color(d.data[this.keyProp]))
             .transition()
             .duration(600)
-            .attrTween('d', this.getArcTween('start', arc))
+            .attrTween('d', this.getArcTween(arc))
             .on('end', () => this.saveArcs(paths));
     }
 
@@ -107,7 +107,7 @@ export class DonutChartComponent {
             .attrTween('d', (d) => {
                 const prevArc = this.arcLookup[d.data[this.keyProp]];
                 if (!prevArc) {
-                    return this.getArcTween('start', arc)(d);
+                    return this.getArcTween(arc)(d);
                 }
                 const interpolate = this.d3.interpolateObject(prevArc, d);
                 return t => arc(interpolate(t));
@@ -119,7 +119,7 @@ export class DonutChartComponent {
         paths.transition()
             .delay(300)
             .duration(600)
-            .attrTween('d', this.getArcTween('midReverse', arc))
+            .attrTween('d', this.getArcTween(arc))
             .remove();
     }
 
@@ -146,6 +146,9 @@ export class DonutChartComponent {
             .duration(600)
             .attrTween('transform', (d) => {
                 const prevArc = this.arcLookup[d.data[this.keyProp]];
+                if (!prevArc) {
+                    return this.getArcTween(arc)(d);
+                }
                 const interpolate = this.d3.interpolateObject(prevArc, d);
                 return (t) => {
                     const angle = interpolate(t);
@@ -198,36 +201,34 @@ export class DonutChartComponent {
      */
     private update (elements, data: any[], color: Function) {
         const { svg, pie, arc } = elements;
-        const existing = svg.selectAll('.arc');
 
-        const enter = existing
-            .data(pie(data))
-            .enter()
+        const existing = svg.selectAll('.arc')
+            .data(pie(data));
+
+        const enter = existing.enter()
             .append('g')
             .attr('class', 'arc');
 
-        const addedPaths = enter.append('path');
-        const addedTexts = enter.append('text');
-
         const exit = existing.exit();
 
-        this.removePaths(exit.select('path'), arc);
-        this.removeTexts(exit.select('text'), arc);
-
-        exit.transition()
-            .duration(600)
-            .remove();
-
-        if (!existing.size()) {
-            this.addPaths(addedPaths, arc, color);
-            this.addTexts(addedTexts, arc);
-            return;
+        if (enter.size()) {
+            this.addPaths(enter.append('path'), arc, color);
+            this.addTexts(enter.append('text'), arc);
         }
 
-        const allPaths = addedPaths.merge(existing.select('path'));
-        const allTexts = addedTexts.merge(existing.select('text'));
-        this.updatePaths(allPaths, arc, color);
-        this.updateTexts(allTexts, arc);
+        if (existing.size()) {
+            this.updatePaths(existing.select('path'), arc, color);
+            this.updateTexts(existing.select('text'), arc);
+        }
+
+        if (exit.size()) {
+            exit.transition()
+                .duration(600)
+                .remove();
+
+            this.removePaths(exit.select('path'), arc);
+            this.removeTexts(exit.select('text'), arc);
+        }
     }
 
     /**
@@ -248,31 +249,11 @@ export class DonutChartComponent {
         });
     }
 
-    private getArcTween (type: string = 'start', arc) {
-        if (type === 'start') {
-            return (d) => {
-                const startObj = { endAngle: 0, startAngle: 0 };
-                const interpolate = this.d3.interpolateObject(startObj, d);
-                return t => arc(interpolate(t));
-            };
-        }
-
-        if (type === 'mid') {
-            return (d) => {
-                const mid = (d.endAngle + d.startAngle) / 2;
-                const midObj = { endAngle: mid, startAngle: mid };
-                const interpolate = this.d3.interpolateObject(midObj, d);
-                return t => arc(interpolate(t));
-            };
-        }
-
-        if (type === 'midReverse') {
-            return (d) => {
-                const mid = (d.endAngle + d.startAngle) / 2;
-                const midObj = { endAngle: mid, startAngle: mid };
-                const interpolate = this.d3.interpolateObject(d, midObj);
-                return t => arc(interpolate(t));
-            };
-        }
+    private getArcTween (arc) {
+        return (d) => {
+            const startObj = { endAngle: 0, startAngle: 0 };
+            const interpolate = this.d3.interpolateObject(startObj, d);
+            return t => arc(interpolate(t));
+        };
     }
 }
