@@ -1,6 +1,6 @@
 import { inject } from 'aurelia-framework';
 import { EventAggregator } from 'aurelia-event-aggregator';
-import { PollsStore } from '../../../shared/data/polls/polls-store';
+import { PollsStore } from '../polls-store';
 
 @inject(PollsStore, EventAggregator)
 export class Overview {

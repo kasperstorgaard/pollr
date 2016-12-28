@@ -1,7 +1,7 @@
 import { test } from 'tape';
 import * as td from 'testdouble/dist/testdouble.js';
 
-import { App } from '../src/app';
+import { App } from './app';
 import { RouterConfiguration, Router } from 'aurelia-router';
 import { Container } from 'aurelia-dependency-injection';
 import { History } from 'aurelia-history';

@@ -1,5 +1,4 @@
 import { Router, RouterConfiguration } from 'aurelia-router';
-import './shared/data/stores';
 
 export class App {
   public heading = 'pollr';

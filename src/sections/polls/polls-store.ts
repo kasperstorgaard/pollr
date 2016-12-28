@@ -1,5 +1,5 @@
 import { inject } from 'aurelia-framework';
-import { HorizonClient } from '../horizon-client';
+import { HorizonClient } from '../../shared/horizon-client';
 import { EventAggregator } from 'aurelia-event-aggregator';
 
 @inject(HorizonClient, EventAggregator)

@@ -29,5 +29,4 @@ export class Polls {
 
         this.router = router;
     }
-
 };

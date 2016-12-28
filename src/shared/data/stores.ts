@@ -1,1 +1,0 @@
-import './polls/polls-store';
