@@ -8,29 +8,7 @@ SystemJS.config({
   },
   devConfig: {
     "map": {
-      "ts": "github:frankwallis/plugin-typescript@5.3.1",
-      "testdouble": "npm:testdouble@1.10.1"
-    },
-    "packages": {
-      "npm:testdouble@1.10.1": {
-        "map": {
-          "stringify-object": "npm:stringify-object@2.4.0",
-          "lodash": "npm:lodash@4.17.2",
-          "quibble": "npm:quibble@0.4.0",
-          "node-quibble": "npm:quibble@0.4.0"
-        }
-      },
-      "npm:quibble@0.4.0": {
-        "map": {
-          "lodash": "npm:lodash@4.17.2"
-        }
-      },
-      "npm:stringify-object@2.4.0": {
-        "map": {
-          "is-regexp": "npm:is-regexp@1.0.0",
-          "is-plain-obj": "npm:is-plain-obj@1.1.0"
-        }
-      }
+      "ts": "github:frankwallis/plugin-typescript@5.3.1"
     }
   },
   transpiler: "plugin-typescript",
@@ -117,6 +95,8 @@ SystemJS.config({
     "rxjs": "npm:rxjs@5.0.0-beta.11",
     "stream": "npm:jspm-nodelibs-stream@0.2.0",
     "string_decoder": "npm:jspm-nodelibs-string_decoder@0.2.0",
+    "tape": "npm:tape@4.6.3",
+    "testdouble": "github:testdouble/testdouble.js@master",
     "tls": "npm:jspm-nodelibs-tls@0.2.0",
     "tty": "npm:jspm-nodelibs-tty@0.2.0",
     "tweetnacl": "npm:tweetnacl@0.14.5",
@@ -126,13 +106,6 @@ SystemJS.config({
     "zlib": "npm:jspm-nodelibs-zlib@0.2.2"
   },
   packages: {
-    "npm:asn1.js@4.9.0": {
-      "map": {
-        "bn.js": "npm:bn.js@4.11.6",
-        "inherits": "npm:inherits@2.0.3",
-        "minimalistic-assert": "npm:minimalistic-assert@1.0.0"
-      }
-    },
     "npm:aurelia-binding@1.0.9": {
       "map": {
         "aurelia-logging": "npm:aurelia-logging@1.1.1",
@@ -417,7 +390,7 @@ SystemJS.config({
     },
     "npm:parse-asn1@5.0.0": {
       "map": {
-        "asn1.js": "npm:asn1.js@4.9.0",
+        "asn1.js": "npm:asn1.js@4.9.1",
         "browserify-aes": "npm:browserify-aes@1.0.6",
         "create-hash": "npm:create-hash@1.1.2",
         "evp_bytestokey": "npm:evp_bytestokey@1.0.0",
@@ -2466,6 +2439,73 @@ SystemJS.config({
     "npm:generate-object-property@1.2.0": {
       "map": {
         "is-property": "npm:is-property@1.0.2"
+      }
+    },
+    "npm:tape@4.6.3": {
+      "map": {
+        "defined": "npm:defined@1.0.0",
+        "function-bind": "npm:function-bind@1.1.0",
+        "for-each": "npm:for-each@0.3.2",
+        "object-inspect": "npm:object-inspect@1.2.1",
+        "has": "npm:has@1.0.1",
+        "resolve": "npm:resolve@1.1.7",
+        "through": "npm:through@2.3.8",
+        "deep-equal": "npm:deep-equal@1.0.1",
+        "minimist": "npm:minimist@1.2.0",
+        "inherits": "npm:inherits@2.0.3",
+        "string.prototype.trim": "npm:string.prototype.trim@1.1.2",
+        "glob": "npm:glob@7.1.1",
+        "resumer": "npm:resumer@0.0.0"
+      }
+    },
+    "npm:has@1.0.1": {
+      "map": {
+        "function-bind": "npm:function-bind@1.1.0"
+      }
+    },
+    "npm:string.prototype.trim@1.1.2": {
+      "map": {
+        "function-bind": "npm:function-bind@1.1.0",
+        "define-properties": "npm:define-properties@1.1.2",
+        "es-abstract": "npm:es-abstract@1.6.1"
+      }
+    },
+    "npm:for-each@0.3.2": {
+      "map": {
+        "is-function": "npm:is-function@1.0.1"
+      }
+    },
+    "npm:resumer@0.0.0": {
+      "map": {
+        "through": "npm:through@2.3.8"
+      }
+    },
+    "npm:es-abstract@1.6.1": {
+      "map": {
+        "function-bind": "npm:function-bind@1.1.0",
+        "is-regex": "npm:is-regex@1.0.3",
+        "is-callable": "npm:is-callable@1.1.3",
+        "es-to-primitive": "npm:es-to-primitive@1.1.1"
+      }
+    },
+    "npm:define-properties@1.1.2": {
+      "map": {
+        "foreach": "npm:foreach@2.0.5",
+        "object-keys": "npm:object-keys@1.0.11"
+      }
+    },
+    "npm:es-to-primitive@1.1.1": {
+      "map": {
+        "is-callable": "npm:is-callable@1.1.3",
+        "is-date-object": "npm:is-date-object@1.0.1",
+        "is-symbol": "npm:is-symbol@1.0.1"
+      }
+    },
+    "npm:asn1.js@4.9.1": {
+      "map": {
+        "bn.js": "npm:bn.js@4.11.6",
+        "inherits": "npm:inherits@2.0.3",
+        "minimalistic-assert": "npm:minimalistic-assert@1.0.0"
       }
     }
   }

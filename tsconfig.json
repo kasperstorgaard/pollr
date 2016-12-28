@@ -10,8 +10,7 @@
     "rootDir": "src",
     "sourceMap": true,
     "sourceRoot": "src",
-    "target": "es5",
-    "typeRoots": ["./typings"]
+    "target": "es5"
   },
   "filesGlob": [
     "./src/**/*.ts",

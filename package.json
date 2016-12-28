@@ -31,6 +31,11 @@
     "concurrently": "^3.1.0",
     "jspm": "github:jspm/jspm-cli#0.17"
   },
+  "ava": {
+    "require": [
+      "ava-jspm-loader"
+    ]
+  },
   "jspm": {
     "dependencies": {
       "@horizon/client": "npm:@horizon/client@^2.0.0",
@@ -44,10 +49,11 @@
       "material-design-lite": "github:google/material-design-lite@^1.2.1",
       "plugin-typescript": "github:frankwallis/plugin-typescript@^5.3.1",
       "rxjs": "npm:rxjs@5.0.0-beta.11",
+      "tape": "npm:tape@^4.6.3",
+      "testdouble": "github:testdouble/testdouble.js@master",
       "text": "github:systemjs/plugin-text@^0.0.9"
     },
     "devDependencies": {
-      "testdouble": "npm:testdouble@^1.10.1",
       "ts": "github:frankwallis/plugin-typescript@^5.3.1"
     },
     "peerDependencies": {
@@ -106,6 +112,9 @@
       "zlib": "npm:jspm-nodelibs-zlib@^0.2.0"
     },
     "overrides": {
+      "github:google/material-design-lite@1.2.1": {
+        "main": "material.js"
+      },
       "npm:bluebird@3.4.6": {
         "meta": {
           "js/browser/bluebird.js": {
