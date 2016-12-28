@@ -1,13 +1,17 @@
 <template>
     <require from="../../../shared/components/poll/poll-component"></require>
-    <section class="section--center mdl-grid mdl-grid--no-spacing">
+    <section class="section--center mdl-grid">
+        <div class="mdl-cell mdl-cell--12-col"
+            style="padding: 16px; background: white"
+        >
+        <h3>Create a new poll</h3>
+        </div>
         <div class="mdl-cell mdl-cell--8-col"
             style="padding: 16px; background: white"
         >
-            <h3>Create a poll</h3>
             <div>
                 <div class="mdl-textfield mdl-textfield--full-width
-                    mdl-js-textfield"
+                    mdl-js-textfield mdl-textfield--floating-label"
                 >
                     <input class="mdl-textfield__input"
                         type="text"
@@ -15,10 +19,9 @@
                         value.two-way="poll.name">
                     <label class="mdl-textfield__label"
                         for="name"
-                    >name...</label>
+                    >name</label>
                 </div>
             </div>
-            <h4>options</h4>
             <div repeat.for="option of poll.options">
                 <div class="mdl-textfield mdl-textfield--full-width
                     mdl-js-textfield"
@@ -31,7 +34,8 @@
                 </div>
             </div>
             <div style="display: flex">
-                <div class="mdl-textfield mdl-js-textfield"
+                <div class="mdl-textfield mdl-js-textfield
+                    mdl-textfield--floating-label"
                     style="flex-grow: 1"
                 >
                     <input class="mdl-textfield__input"
@@ -41,7 +45,7 @@
                     >
                     <label class="mdl-textfield__label"
                         for="option"
-                    >option name...</label>
+                    >option</label>
                 </div>
                 <button bind.if="!option.id"
                     click.trigger="addOption(newOption)"
