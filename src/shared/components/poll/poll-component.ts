@@ -1,30 +1,29 @@
 import { inject, bindable } from 'aurelia-framework';
 import { colors } from '../../config/colors';
-import { EventAggregator } from 'aurelia-event-aggregator';
+import { PollsStore } from '../../../data/polls/polls-store';
 
-@inject(colors, EventAggregator)
+@inject(PollsStore, colors)
 export class PollComponent {
     @bindable public poll: Object;
     public color: Function;
+    private store: PollsStore;
 
-    private ea: EventAggregator;
-
-    constructor (colors, ea: EventAggregator) {
+    constructor (store: PollsStore, colors) {
+        this.store = store;
         this.color = colors.standard;
-        this.ea = ea;
     }
 
     // - public methods - //
     public vote (poll, optionId) {
-        this.ea.publish('POLL_VOTE', { poll, optionId });
+        this.store.dispatch('POLL_VOTE', { poll, optionId });
     }
 
     public reset (poll) {
-        this.ea.publish('POLL_RESET', { poll });
+        this.store.dispatch('POLL_RESET', { poll });
     }
 
     public remove (poll) {
-        this.ea.publish('POLL_REMOVE', { poll });
+        this.store.dispatch('POLL_REMOVE', { poll });
     }
 
     public getBgStyle (id) {

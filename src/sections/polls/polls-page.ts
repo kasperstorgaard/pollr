@@ -1,5 +1,5 @@
 import { inject } from 'aurelia-framework';
-import { PollsStore } from './polls-store';
+import { PollsStore } from '../../data/polls/polls-store';
 
 @inject(PollsStore)
 export class Overview {

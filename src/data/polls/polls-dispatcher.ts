@@ -1,22 +1,14 @@
-import { inject } from 'aurelia-framework';
-import { HorizonClient } from '../../shared/horizon-client';
-import { EventAggregator } from 'aurelia-event-aggregator';
-
-@inject(HorizonClient, EventAggregator)
 export class PollsDispatcher {
     public collection: any;
-    private ea: EventAggregator;
 
-    constructor (client: HorizonClient, ea: EventAggregator) {
-        this.collection = client.getCollection('polls');
-        this.ea = ea;
-        this.subscribe();
-    }
-
-    private subscribe () {
+    public dispatch (action: string, opts: any) {
         const { actions } = this;
-        const keys = Object.keys(actions);
-        keys.forEach(key => this.ea.subscribe(key, actions[key].bind(this)));
+        const method = actions[action];
+        if (!method) {
+            return;
+        }
+
+        method.call(this, opts);
     }
 
     private get actions () {
@@ -29,17 +21,17 @@ export class PollsDispatcher {
         };
     }
 
-    private add (opts) {
+    private add (opts: any) {
         const { poll } = opts;
         this.collection.store(poll);
     }
 
-    private remove (opts) {
+    private remove (opts: any) {
         const { poll } = opts;
         this.collection.remove(poll.id);
     }
 
-    private vote (opts) {
+    private vote (opts: any) {
         const { poll, optionId } = opts;
         const { options = [] } = poll;
         const idx = options.findIndex(p => p.id === optionId);
@@ -57,14 +49,14 @@ export class PollsDispatcher {
         this.collection.update(newPoll);
     }
 
-    private rename (opts) {
+    private rename (opts: any) {
         const { poll, name } = opts;
 
         const newPoll = Object.assign({}, poll, { name });
         this.collection.update(newPoll);
     }
 
-    private reset (opts) {
+    private reset (opts: any) {
         const { poll } = opts;
         const { options = [] } = poll;
 

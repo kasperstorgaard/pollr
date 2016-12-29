@@ -1,4 +1,4 @@
-import './root-store';
+import './data/root-store';
 import { Router, RouterConfiguration } from 'aurelia-router';
 
 export class App {
