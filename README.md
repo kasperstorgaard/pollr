@@ -1,6 +1,12 @@
 # pollr
 a simple app where you can create a poll for anything
 
+# Prerequisites
+- install rethinkdb
+- install horizon:
+    `npm install -g horizon`
+    
+
 ## install
 ```
 npm install
