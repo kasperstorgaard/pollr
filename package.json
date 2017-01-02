@@ -29,7 +29,7 @@
     "aurelia-bundler": "^0.5.0",
     "browser-sync": "^2.18.2",
     "concurrently": "^3.1.0",
-    "jspm": "github:jspm/jspm-cli#0.17"
+    "jspm": "github:jspm/jspm-cli#0.17.0-beta.32"
   },
   "ava": {
     "require": [
@@ -242,7 +242,6 @@
     "@types/d3": "^4.3.0",
     "@types/d3-scale": "^1.0.4",
     "@types/d3-selection": "^1.0.5",
-    "ts-node": "^1.7.2",
     "types.d3": "^0.1.1",
     "typescript": "^2.1.4"
   }
