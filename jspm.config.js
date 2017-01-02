@@ -82,9 +82,9 @@ SystemJS.config({
           "postcss": "npm:postcss@5.2.8",
           "sass.js": "npm:sass.js@0.9.13",
           "autoprefixer": "npm:autoprefixer@6.6.0",
-          "fs": "github:jspm/nodelibs-fs@0.1.2",
-          "url": "github:jspm/nodelibs-url@0.1.0",
-          "path": "github:jspm/nodelibs-path@0.1.0",
+          "fs": "npm:jspm-nodelibs-fs@0.2.0",
+          "url": "npm:jspm-nodelibs-url@0.2.0",
+          "path": "npm:jspm-nodelibs-path@0.2.0",
           "reqwest": "github:ded/reqwest@2.0.5"
         }
       },
@@ -134,22 +134,6 @@ SystemJS.config({
       "npm:browserslist@1.5.1": {
         "map": {
           "caniuse-db": "npm:caniuse-db@1.0.30000602"
-        }
-      },
-      "github:jspm/nodelibs-url@0.1.0": {
-        "map": {
-          "url": "npm:url@0.10.3"
-        }
-      },
-      "npm:url@0.10.3": {
-        "map": {
-          "querystring": "npm:querystring@0.2.0",
-          "punycode": "npm:punycode@1.3.2"
-        }
-      },
-      "github:jspm/nodelibs-path@0.1.0": {
-        "map": {
-          "path-browserify": "npm:path-browserify@0.0.0"
         }
       }
     }
@@ -244,6 +228,7 @@ SystemJS.config({
     "rxjs": "npm:rxjs@5.0.0-beta.11",
     "stream": "npm:jspm-nodelibs-stream@0.2.0",
     "string_decoder": "npm:jspm-nodelibs-string_decoder@0.2.0",
+    "text": "github:systemjs/plugin-text@0.0.9",
     "tls": "npm:jspm-nodelibs-tls@0.2.0",
     "tty": "npm:jspm-nodelibs-tty@0.2.0",
     "tweetnacl": "npm:tweetnacl@0.14.5",
